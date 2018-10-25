@@ -28,19 +28,31 @@ $opel = [
     "year" => "1111"
 ];
 //4----------------------------
-foreach ($bmv as $value) {
-    echo "$value - ";
+foreach ($bmv as $key => $value) {
+    if($key == 'year') {
+        echo $value;
+    }else{
+        echo "$value - ";
+    }
 }
 
 echo "</br>";
 
-foreach ($toyota as $value) {
-    echo "$value -";
+foreach ($toyota as $key => $value) {
+    if($key == 'year') {
+        echo $value;
+    }else{
+        echo "$value - ";
+    }
 }
 
 echo "</br>";
 
-foreach ($opel as $value) {
-    echo "$value - ";
+foreach ($opel as $key => $value) {
+    if($key == 'year') {
+        echo $value;
+    }else{
+        echo "$value - ";
+    }
 }
 echo "</br>";
