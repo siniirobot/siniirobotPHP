@@ -74,7 +74,7 @@ if (isset($_POST['step1']) && $_POST['step1']) {
         $row = isset($_POST['row']) && is_array($_POST['row']) ? $_POST['row'] : [];
         foreach ($row as $vl) {
             if (is_array($vl) && count($vl) > 0) {
-                echo implode(',', $vl);
+                echo htmlspecialchars(implode(',', $vl));
                 echo "\n";
             }
         }

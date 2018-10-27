@@ -79,7 +79,7 @@ if (isset($_POST['step1']) && $_POST['step1']){
 
         foreach ($rows as $vl) {
             if (is_array($vl) && count($vl) > 0) {
-                echo implode(',', $vl);
+                echo htmlspecialchars(implode(',', $vl));
                 echo "\n";
             }
         }
