@@ -19,7 +19,7 @@ $columnCount = isset($_POST['columnCount']) ? intval($_POST['columnCount']) : ''
 if (isset($_POST['columnCount']) && $_POST['columnCount'] > 0) {
     $rowsCount = ceil(count($arr) / $columnCount);
 }else{
-    echo 'Вы ввели что не то надо вести число больше нуля';
+    echo '';
 }
 ?>
 
