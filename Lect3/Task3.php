@@ -16,8 +16,10 @@ for ($h = 1; $h < $arrayElements; $h++) {
 }
 $columnCount = isset($_POST['columnCount']) ? intval($_POST['columnCount']) : '';
 
-if (isset($_POST['columnCount'])) {
+if (isset($_POST['columnCount']) && $_POST['columnCount'] > 0) {
     $rowsCount = ceil(count($arr) / $columnCount);
+}else{
+    echo 'Вы ввели что не то надо вести число больше нуля';
 }
 ?>
 
@@ -31,7 +33,7 @@ if (isset($_POST['columnCount'])) {
             <input style="width: 200px" type="text" name="columnCount" placeholder="Введите количество колонок" value="<?= $columnCount ?>">
             <input type="submit" value="Создать">
         </form>
-        <?php if (isset($_POST['columnCount'])) { ?>
+        <?php if (isset($_POST['columnCount']) && $_POST['columnCount'] > 0) { ?>
             <table width="100%" bgcolor="#8a2be2" border="5px" style="color: white">
                 <?php for ($i = 0; $i < $rowsCount; $i++) {
                     echo '<tr>';
