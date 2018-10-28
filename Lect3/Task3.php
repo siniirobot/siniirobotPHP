@@ -9,8 +9,11 @@
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
-
-$arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+$arrayElements = rand(1,1000);
+$arr = [];
+for ($h = 1; $h < $arrayElements; $h++) {
+    $arr[] = $h;
+}
 $columnCount = isset($_POST['columnCount']) ? intval($_POST['columnCount']) : '';
 
 if (isset($_POST['columnCount'])) {
@@ -29,7 +32,7 @@ if (isset($_POST['columnCount'])) {
             <input type="submit" value="Создать">
         </form>
         <?php if (isset($_POST['columnCount'])) { ?>
-            <table width="100%" bgcolor="#8a2be2" border="5px">
+            <table width="100%" bgcolor="#8a2be2" border="5px" style="color: white">
                 <?php for ($i = 0; $i < $rowsCount; $i++) {
                     echo '<tr>';
                          for ($j = 0; $j < $columnCount; $j++) {
