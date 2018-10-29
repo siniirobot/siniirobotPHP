@@ -14,13 +14,15 @@ $avgSalary = 0;
 $avgAge = 0;
 $luckyPerson = [];
 $unluckyPerson = [];
+$countWorkers = 0;
 $departments = [
-    'ля'
-];
+    'Бухгалтерия'];
+
 $sumSalary = 0;
 $sumAges = 0;
 
 if ($fp) {
+
     $i = 0;
     $j = 0;
     while (($data = fgetcsv($fp, 1000, ",")) !== FALSE) {
@@ -48,6 +50,7 @@ if ($fp) {
             }
             $j++;
         }
+        echo $i.'</br>';
         /*
         $num = count($data);
         echo "<p> $num полей в строке $row: <br /></p>\n";
