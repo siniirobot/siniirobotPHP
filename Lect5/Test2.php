@@ -21,12 +21,9 @@ $fNnames = [
 $lNnames = [
     'Петров',
     'Васечкин',
-    'Пукин',
-    'Совин',
-    'Николев',
-    'Ивонов',
-    'Васильев',
     'Сидоров',
+    'Иванов',
+    'Зайцев',
     'Кошкин',
     'Собакин',
 ];
@@ -34,7 +31,7 @@ $lNnames = [
 $departments = [
     'Маркетинг',
     'Бухгалтерия',
-    'Отдел разработки',
+    'Отдел развития',
     'Дизайн',
     'Разработка',
 ];
@@ -48,12 +45,14 @@ if ($fp = fopen('users.csv', 'w')) {
     for ($i = 0; $i < 1000; $i++){
         srand(make_seed());
         $f = $fNnames[rand(0, count($fNnames) - 1)];
-        $name = $f[0].' '.$lNnames[rand(0,count($lNnames) - 1)].($f[1] == 'f');
+        $name = $f[0].' '.$lNnames[rand(0,count($lNnames) - 1)].($f[1] == 'f' ? 'а' : '');
         $dep = $departments[rand(0,count($departments) - 1)];
         $age = rand(18,65);
         $salary = rand(20,200);
-        fputcsv($fp, [$name, $dep, $age, $salary* 1000], ',');
+        fputcsv($fp, [$name, $dep, $age, $salary * 1000], ',');
     }
     fclose($fp);
     echo 'DONE';
+}else{
+    echo 'Can\'t create file users.csv';
 }
