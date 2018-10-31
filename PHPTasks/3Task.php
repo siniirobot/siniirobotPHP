@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 //1-----------------------------------
 
-var_dump(2*2)."\n";
+var_dump(2*2)."\n";//
 echo ' <br/>';
 var_dump(3/1);
 echo ' <br/>';
