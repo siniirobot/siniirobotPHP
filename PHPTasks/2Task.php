@@ -14,14 +14,14 @@ const FIRST_CONSTANT=42;
 //2-------------------------------------
 
 if(defined('FIRST_CONSTANT')){
-    echo "Существует переменная FIRST_CONSTANT</br>".PHP_EOL;
+    echo "Существует переменная FIRST_CONSTANT</br>";
 }else{
-    echo "Не существует переменная FIRST_CONSTANT</br>".PHP_EOL;
+    echo "Не существует переменная FIRST_CONSTANT</br>";
 }
 
 //3---------------------------------------
 
-echo 'Значение моей константы равно = '.FIRST_CONSTANT.'.</br>'.PHP_EOL;
+echo 'Значение моей константы равно = '.FIRST_CONSTANT.'.</br>';
 
 //4---------------------------------------
 
