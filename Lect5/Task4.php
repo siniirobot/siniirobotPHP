@@ -14,18 +14,10 @@ $avgSalary = 0;
 $avgAge = 0;
 $luckyPerson = [];
 $unluckyPerson = [];
-$countWorkers = 0;
 $departments = array();
 
 $sumSalary = 0;
 $sumAges = 0;
-
-$sumSalaryByDepartments = 0;
-$sumAgesByDepartments = 0;
-$avgSalaryByDepartments = 0;
-$avgAgeByDepartments = 0;
-$luckyPersonFromDep = [];
-$unluckyPersonFromDep = [];
 
 if ($fp) {
     $i = 0;
