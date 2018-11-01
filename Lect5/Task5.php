@@ -14,6 +14,7 @@ $i = 0;
 $j = 0;
 $page = isset($_POST['page']) ? intval($_POST['page']) : 0;
 
+
 if (isset($_POST['firstPage']) && $_POST['firstPage']) {
     $page = 0;
 } elseif (isset($_POST['back']) && $_POST['back'] && $page > 0) {
