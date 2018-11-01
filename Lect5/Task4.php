@@ -48,48 +48,41 @@ if ($fp) {
             $unluckyPerson = $data;
         }
         if (array_key_exists($data[1], $departments)) {
-            if (count($departments[$data[1]][0]) > 0) {
+            if (isset($departments[$data[1]][0])) {
                 $departments[$data[1]][0]++;
             } else {
-                $departments[$data[1]][0] = 1;
+                $departments[$data[1]][] = 1;
             }
 
-            if (count($departments[$data[1]][1]) > 0) {
+            if (isset($departments[$data[1]][1])) {
                 $departments[$data[1]][1] += $data[3];
             } else {
-                $departments[$data[1]][1] = $data[3];
+                $departments[$data[1]][] = $data[3];
             }
 
-            if (count($departments[$data[1]][2]) > 0) {
+            if (isset($departments[$data[1]][2])) {
                 $departments[$data[1]][2] += $data[2];
             } else {
-                $departments[$data[1]][2] = $data[2];
+                $departments[$data[1]][] = $data[2];
             }
 
-            if (count($departments[$data[1]][3]) > 0) {
+            if (isset($departments[$data[1]][3])) {
                 if ($departments[$data[1]][3][3] < $data[3])
                     $departments[$data[1]][3] = $data;
             } else {
-                $departments[$data[1]][3] = $data;
+                $departments[$data[1]][] = $data;
             }
 
-            if (count($departments[$data[1]][4]) > 0) {
+            if (isset($departments[$data[1]][4])) {
                 if ($departments[$data[1]][4][3] > $data[3])
                     $departments[$data[1]][4] = $data;
             } else {
-                $departments[$data[1]][4] = $data;
+                $departments[$data[1]][] = $data;
             }
 
 
         } else {
-            $departments[$data[1]] = [
-                null,
-                null,
-                null,
-                null,
-                null,
-            ];
-
+            $departments[$data[1]] = [];
         }
     }
 }
