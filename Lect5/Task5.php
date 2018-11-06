@@ -7,36 +7,31 @@
  */
 
 header('Content-Type: text/html; charset=utf-8');
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 $fp = fopen('users.csv', 'rb');
 $i = 0;
 $j = 0;
-$start = 0;
+$start = isset($_GET['page']) ? intval($_GET['page']) : 0;
 
-if (isset($_POST['firstPage']) && $_POST['firstPage']) {
-    $start = 0;
-    echo 'Это страница 0';
-}else
+echo var_dump($_GET['firstPage']).'</br>';
+echo var_dump($_GET['back']).'</br>';
+echo var_dump($_GET['page']).'</br>';
+echo var_dump($_GET['forward']).'</br>';
+echo var_dump($_GET['lastPage']).'</br>';
 
-if (isset($_POST['back']) && $_POST['back'] && $start > 0) {
-    $start = $start - 1;
-    echo 'Это страница назад';
-}else
-
-if ($_POST['forward'] && $start < 49) {
-    $start = $start + 1;
-    echo 'Это страница вперед';
-}else
-
-if (isset($_POST['lastPage']) && $_POST['lastPage']) {
+if (isset($_GET['forward'])){
+    $start++;
+}elseif(isset($_GET['back'])){
+    $start--;
+}elseif($_GET['lastPage']){
     $start = 49;
-    echo 'Это страница 49';
-}else
-if (isset($_POST['page'])){
-    $start = $_POST['page'];
-    echo 'это страница'.$start;
+}elseif ($_GET['lastPage']){
+    $start=0;
+}else{
+    $start = isset($_GET['page']) ? intval($_GET['page']) : 0;
 }
+
 echo '</br>'.'текущая страница'.$start;
 
 ?>
@@ -66,7 +61,7 @@ echo '</br>'.'текущая страница'.$start;
     } ?>
 </div>
 <div>
-    <form action="Task5.php" method="post">
+    <form action="Task5.php" method="get">
         <input style="width: 150px" type="submit" name="firstPage" value="На первую страницу">
         <input type="submit" name="back" value="&#8592;">
 
@@ -79,30 +74,3 @@ echo '</br>'.'текущая страница'.$start;
 
 </body>
 </html>
-<?php
-if ($_POST['page']) {
-    echo 'Этак кнопка page правда'.'</br>';
-}else{
-    echo 'Этак кнопка page не правда'.'</br>';
-}
-if ($_POST['firstPage']) {
-    echo 'Этак кнопка firstPage правда'.'</br>';
-}else{
-    echo 'Этак кнопка firstPage не правда'.'</br>';
-}
-if ($_POST['back']) {
-    echo 'Этак кнопка back правда'.'</br>';
-}else{
-    echo 'Этак кнопка back не правда'.'</br>';
-}
-if ($_POST['forward']) {
-    echo 'Этак кнопка forward правда'.'</br>';
-}else{
-    echo 'Этак кнопка forward не правда'.'</br>';
-}
-if ($_POST['lastPage']) {
-    echo 'Этак кнопка lastPage правда'.'</br>';
-}else{
-    echo 'Этак кнопка lastPage не правда'.'</br>';
-}
-?>
