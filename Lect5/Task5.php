@@ -26,6 +26,8 @@ if (isset($_GET['forward'])){
     $start--;
 }elseif(isset($_GET['lastPage'])){
     $start = 49;
+}elseif(isset($_GET['firstPage'])){
+    $start=$_GET['page'];
 }else{
     $start=0;
 }
