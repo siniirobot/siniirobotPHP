@@ -7,7 +7,7 @@
  */
 
 header('Content-Type: text/html; charset=utf-8');
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 $fp = fopen('users.csv', 'rb');
 $i = 0;
@@ -24,12 +24,10 @@ if (isset($_GET['forward'])){
     $start++;
 }elseif(isset($_GET['back'])){
     $start--;
-}elseif($_GET['lastPage']){
+}elseif(isset($_GET['lastPage'])){
     $start = 49;
-}elseif ($_GET['lastPage']){
-    $start=0;
 }else{
-    $start = isset($_GET['page']) ? intval($_GET['page']) : 0;
+    $start=0;
 }
 
 echo '</br>'.'текущая страница'.$start;
@@ -63,14 +61,15 @@ echo '</br>'.'текущая страница'.$start;
 <div>
     <form action="Task5.php" method="get">
         <input style="width: 150px" type="submit" name="firstPage" value="На первую страницу">
+
         <input type="submit" name="back" value="&#8592;">
 
         <input type="text" name="page" value="<?=$start?>" style="width: 30px">
+
         <input type="submit" name="forward" value="&#8594;">
 
         <input style="width: 150px" type="submit" name="lastPage" value="На последнюю страницу">
     </form>
 </div>
-
 </body>
 </html>
