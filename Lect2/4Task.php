@@ -42,7 +42,7 @@ $tableAnd = <<<LOGIC1
                 <th> = </th>
             </tr>
         </thead>
-        <tbody>
+        <body>
             <tr>
                 <td>0</td>
                 <td>0</td>
@@ -65,7 +65,7 @@ $tableAnd = <<<LOGIC1
                 <td>a && b</td>
                 <td>$a1b1</td>
             </tr>
-        </tbody>
+        </body>
     </table>
 LOGIC1;
 

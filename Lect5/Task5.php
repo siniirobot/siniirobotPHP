@@ -38,7 +38,7 @@ if (isset($_GET['forward']) && $start < 50){
     </style>
 </head>
 <body>
-<div style="width: 400px;background: red">
+<div style="width: 380px;">
     <?php
     if ($fp) {
         while (($data = fgetcsv($fp, 1000, ",")) !== FALSE) {
@@ -56,9 +56,9 @@ if (isset($_GET['forward']) && $start < 50){
         echo 'Проблемы с открытием файла';
     } ?>
 </div>
-<div style="width: 500px;background: aqua">
+<div style="width: 505px;">
     <form action="Task5.php" method="get" style="display: inline">
-        <input style="width: 150px;display: inline" type="submit" name="firstPage" value="На первую страницу">
+        <input style="width: auto;display: inline" type="submit" name="firstPage" value="Перейти к первой странице">
         <input type="hidden" name="page" value="<?=$start?>">
         <input style="display: inline" type="submit" name="back" value="&#8592;">
     </form>
@@ -70,7 +70,7 @@ if (isset($_GET['forward']) && $start < 50){
     <form action="Task5.php" method="get" style="display: inline">
         <input type="submit" name="forward" value="&#8594;">
         <input type="hidden" name="page" value="<?=$start?>">
-        <input style="width: 150px" type="submit" name="lastPage" value="На последнюю страницу">
+        <input style="width: auto" type="submit" name="lastPage" value="Перейти к последней странице">
     </form>
 </div>
 </body>

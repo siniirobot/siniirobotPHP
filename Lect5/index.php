@@ -49,7 +49,7 @@ $forwardPage = $page !== $lastPage ? $page + 1 : $lastPage;
 </div>
 <div style="width: 650px;">
     <form style="display: inline">
-        <input type="button" value="Перейти к первой страницу" onclick="location.href='index.php?page=1'">
+        <input type="button" value="Перейти к первой странице" onclick="location.href='index.php?page=1'">
     </form>
     <form style="display: inline">
         <input type="button" value="&#8592;" onclick="location.href='index.php?page=<?= $prevPage; ?>'">
