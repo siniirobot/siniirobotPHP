@@ -12,40 +12,38 @@ error_reporting(E_ALL);
 $fp = fopen('users.csv', 'rb');
 $i = 0;
 $j = 0;
-$start = isset($_GET['page']) ? intval($_GET['page']) : 0;
 
-echo var_dump($_GET['firstPage']).'</br>';
-echo var_dump($_GET['back']).'</br>';
-echo var_dump($_GET['page']).'</br>';
-echo var_dump($_GET['forward']).'</br>';
-echo var_dump($_GET['lastPage']).'</br>';
-echo var_dump($_GET).'</br>';
-echo $start.'</br>'.$_GET['page'].'</br>';
-if (isset($_GET['forward'])){
+$start =  isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+if (isset($_GET['forward']) && $start < 50){
     $start++;
-    $_GET['page'] = $start;
-}elseif(isset($_GET['back'])){
+}elseif(isset($_GET['back']) && $start > 1){
     $start--;
-}elseif(isset($_GET['lastPage'])){
-    $start = 49;
-}elseif(isset($_GET['firstPage'])){
-    $start=0;
+}elseif(isset($_GET['lastPage']) || $start > 50){
+    $start = 50;
+}elseif(isset($_GET['firstPage']) || $start < 1){
+    $start= 1;
 }
-echo $start.'</br>'.$_GET['page'].'</br>';
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>20 на странице</title>
+    <style>
+        div{
+            margin: auto;
+            padding-top: 30px;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div style="width: 400px;background: red">
     <?php
     if ($fp) {
         while (($data = fgetcsv($fp, 1000, ",")) !== FALSE) {
             $i++;
-            if ($i / 20 > $start) {
+            if ($i / 20 > $start -1) {
                 echo $i . '-' . $data[0] . ' ' . $data[1] . ' ' . $data[2] . ' ' . $data[3] . '</br>';
                 $j++;
                 if ($j == 20) {
@@ -58,20 +56,20 @@ echo $start.'</br>'.$_GET['page'].'</br>';
         echo 'Проблемы с открытием файла';
     } ?>
 </div>
-<div>
-    <form action="Task5.php" method="get">
-        <input style="width: 150px" type="submit" name="firstPage" value="На первую страницу">
-
-        <input type="submit" name="back" value="&#8592;">
+<div style="width: 500px;background: aqua">
+    <form action="Task5.php" method="get" style="display: inline">
+        <input style="width: 150px;display: inline" type="submit" name="firstPage" value="На первую страницу">
+        <input type="hidden" name="page" value="<?=$start?>">
+        <input style="display: inline" type="submit" name="back" value="&#8592;">
     </form>
 
-    <form action="Task5.php" method="get">
-        <input type="text" name="page" value="<?=$start?>" style="width: 30px">
+    <form action="Task5.php" method="get" style="display: inline">
+        <input  type="text" name="page" value="<?=$start?>" style="width: 30px">
     </form>
 
-    <form action="Task5.php" method="get">
+    <form action="Task5.php" method="get" style="display: inline">
         <input type="submit" name="forward" value="&#8594;">
-
+        <input type="hidden" name="page" value="<?=$start?>">
         <input style="width: 150px" type="submit" name="lastPage" value="На последнюю страницу">
     </form>
 </div>
