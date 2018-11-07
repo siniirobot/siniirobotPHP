@@ -4,7 +4,8 @@ header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
-$lastPage = 49;
+
+$lastPage = 50;
 $prevPage = $page !== 0 ? $page - 1 : 1;
 $forwardPage = $page !== $lastPage ? $page + 1 : $lastPage;
 
@@ -12,12 +13,17 @@ $forwardPage = $page !== $lastPage ? $page + 1 : $lastPage;
 
 <!DOCTYPE html>
 <html>
+<style>
+    div{
+        margin: auto;
+        padding-top: 30px;
+    }
+</style>
 <head>
 	<title>20 на странице</title>
 </head>
 <body>
-<div>
-    <p>текущая страница <?= $page; ?></p>
+<div style="width: 400px;">
 	<?php
 	$fp = fopen('users.csv', 'rb');
 
@@ -27,7 +33,7 @@ $forwardPage = $page !== $lastPage ? $page + 1 : $lastPage;
 	if ($fp) {
 		while (($data = fgetcsv($fp, 1000, ",")) !== FALSE) {
 			$i++;
-			if ($i / 20 > $page) {
+			if ($i / 20 > $page - 1) {
 				echo $i . '-' . $data[0] . ' ' . $data[1] . ' ' . $data[2] . ' ' . $data[3] . '</br>';
 				$j++;
 				if ($j == 20) {
@@ -39,17 +45,25 @@ $forwardPage = $page !== $lastPage ? $page + 1 : $lastPage;
 	} else {
 		echo 'Проблемы с открытием файла';
 	} ?>
-</div>
-<div>
-    <a href="/index.php?page=1">На первую страницу</a>
-    <a href="/index.php?page=<?= $prevPage; ?>">Назад</a>
 
-	<form action="/index.php" method="get">
-		<input type="text" name="page" value="<?= $page; ?>">
+</div>
+<div style="width: 650px;">
+    <form style="display: inline">
+        <input type="button" value="Перейти к первой страницу" onclick="location.href='index.php?page=1'">
+    </form>
+    <form style="display: inline">
+        <input type="button" value="&#8592;" onclick="location.href='index.php?page=<?= $prevPage; ?>'">
+    </form>
+    <form style="display: inline" action="index.php" method="get">
+        <input type="text" name="page" value="<?= $page; ?>">
+    </form>
+    <form style="display: inline">
+        <input type="button" value="&#8594;" onclick="location.href='index.php?page=<?= $forwardPage; ?>'">
+    </form>
+    <form style="display: inline">
+        <input type="button" value="Перейти к последней странице" onclick="location.href='index.php?page=<?=$lastPage?>'">
     </form>
 
-    <a href="/index.php?page=<?= $forwardPage; ?>">Вперед</a>
-    <a href="/index.php?page=<?= $lastPage; ?>">На последнюю страницу</a>
 </div>
 </body>
 </html>
