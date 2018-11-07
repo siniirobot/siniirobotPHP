@@ -19,7 +19,7 @@ if (count($_POST) > 0) {
     $pass = $_POST['pass'];
 
     if (auth($login, $pass) == true) {
-        header('Location: /project/home.php');
+        header('Location: home.php');
         exit();
     } else {
         $error = 'Введите верные данные';
@@ -30,13 +30,13 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
     $login = $_SESSION['login'];
     $pass = $_SESSION['pass'];
     if (auth($login,$pass) == true) {
-        header('Location: /project/home.php');
+        header('Location: home.php');
         exit();
     }
 }
 ?>
 
-<!DOCTYPE>
+
 <html>
 <head>
     <title>
