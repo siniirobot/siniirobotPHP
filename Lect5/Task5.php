@@ -19,21 +19,19 @@ echo var_dump($_GET['back']).'</br>';
 echo var_dump($_GET['page']).'</br>';
 echo var_dump($_GET['forward']).'</br>';
 echo var_dump($_GET['lastPage']).'</br>';
-
+echo var_dump($_GET).'</br>';
+echo $start.'</br>'.$_GET['page'].'</br>';
 if (isset($_GET['forward'])){
     $start++;
+    $_GET['page'] = $start;
 }elseif(isset($_GET['back'])){
     $start--;
 }elseif(isset($_GET['lastPage'])){
     $start = 49;
 }elseif(isset($_GET['firstPage'])){
-    $start=$_GET['page'];
-}else{
     $start=0;
 }
-
-echo '</br>'.'текущая страница'.$start;
-
+echo $start.'</br>'.$_GET['page'].'</br>';
 ?>
 
 <!DOCTYPE html>
@@ -65,9 +63,13 @@ echo '</br>'.'текущая страница'.$start;
         <input style="width: 150px" type="submit" name="firstPage" value="На первую страницу">
 
         <input type="submit" name="back" value="&#8592;">
+    </form>
 
+    <form action="Task5.php" method="get">
         <input type="text" name="page" value="<?=$start?>" style="width: 30px">
+    </form>
 
+    <form action="Task5.php" method="get">
         <input type="submit" name="forward" value="&#8594;">
 
         <input style="width: 150px" type="submit" name="lastPage" value="На последнюю страницу">
