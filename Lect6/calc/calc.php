@@ -11,9 +11,8 @@ error_reporting(E_ALL);
 
 session_start();
 
-$entryField = isset($_POST['entryField']) ? intval($_POST['entryField']) : 0;
-$result = isset($_POST['result']) ? intval($_POST['result']) : 0;
-//var_dump($_POST);
+$entryField = isset($_POST['entryField']) ? intval($_POST['entryField']) : '';
+$result = isset($_POST['result']) ? intval($_POST['result']) : '';
 
 if (isset($_POST['seven'])) {
     $entryField .= 7;
@@ -46,7 +45,7 @@ if (isset($_POST['zero'])) {
     $entryField .= 0;
 }
 if (isset($_POST['point'])) {
-    $entryField .= 'хрен';
+    $entryField .= '.';
     var_dump($entryField);
 }
 if (isset($_POST['plus'])) {
@@ -56,7 +55,6 @@ if (isset($_POST['plus'])) {
 
 if (isset($_POST['equally'])) {
     $entryField += $result;
-    var_dump($entryField);
     $result = 0;
 }
 
@@ -74,7 +72,7 @@ if (isset($_GET['logout']) > 0) {
 <body>
 <form action="calc.php" method="post">
     <input type="hidden" name="result" value="<?= $result; ?>">
-    <input type="text" name="entryField" value="<?= $entryField; ?>" placeholder="<?= $entryField?>">
+    <input type="text" name="entryField" value="<?= $entryField; ?>" placeholder="0">
     <br>
     <input type="submit" name="seven" value="7">
     <input type="submit" name="eight" value="8">
