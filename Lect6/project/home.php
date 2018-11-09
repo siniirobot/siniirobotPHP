@@ -11,12 +11,10 @@ error_reporting(E_ALL);
 
 session_start();
 
-var_dump($_GET);
-var_dump($_SESSION);
-if (isset($_GET['logout']) && $_GET['logout']){
+if (count($_GET) > 0){
     session_destroy();
-
-
+    header('Location:index.php');
+    exit();
 }
 ?>
 

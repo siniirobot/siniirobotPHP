@@ -1,11 +1,10 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: sinii
- * Date: 31.10.2018
- * Time: 20:41
+ * User: HEAD
+ * Date: 09.11.2018
+ * Time: 10:40
  */
-
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
@@ -19,7 +18,7 @@ if (count($_POST) > 0) {
     $pass = $_POST['pass'];
 
     if (auth($login, $pass)) {
-        header('Location: home.php');
+        header('Location: calc.php');
         exit();
     } else {
         $error = 'Введите верные данные';
@@ -30,7 +29,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
     $login = $_SESSION['login'];
     $pass = $_SESSION['pass'];
     if (auth($login,$pass) == true) {
-        header('Location: home.php');
+        header('Location: calc.php');
         exit();
     }
 }
@@ -44,11 +43,11 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
     </title>
 </head>
 <body>
-    <p><?= $error ?></p>
-    <form action="index.php" method="post">
-        <p><input type="text" name="login" placeholder="Введите логин"></p>
-        <p><input type="password" name="pass" placeholder="Введите пароль"></p>
-        <p><input type="submit" value="Login"></p>
-    </form>
+<p><?= $error ?></p>
+<form action="auth.php" method="post">
+    <p><input type="text" name="login" placeholder="Введите логин"></p>
+    <p><input type="password" name="pass" placeholder="Введите пароль"></p>
+    <p><input type="submit" value="Login"></p>
+</form>
 </body>
 </html>

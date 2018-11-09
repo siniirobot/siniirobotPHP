@@ -7,12 +7,14 @@
  */
 
 session_start();
-$i = $_SESSION['i'];
 
-if (isset($_SESSION['i'])) {
-    $i++;
+/*if (isset($_SESSION['i'])) {
+    $_SESSION['i']++;
 }else{
-    $i = 0;
+    $_SESSION['i'] = 0;
 }
-echo $i;
+echo $_SESSION['i'];*/
 
+isset($_SESSION['i']) ? $_SESSION['i']++ : $_SESSION['i'] = 0;
+
+echo $_SESSION['i'];
