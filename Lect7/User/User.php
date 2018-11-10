@@ -52,7 +52,7 @@ class User
         } elseif ($this->age > 1 && $this->age < 18) {
             return 'Тяжко быть ребенком, а вы ребенок';
         } elseif ($this->age > 18 && $this->age < 65) {
-            return 'Вы в взрослый человек в рассвете сил';
+            return 'Вы взрослый человек в рассвете сил';
         } else {
             return 'Вы пенсионер пожинайте лавры';
         }
