@@ -8,11 +8,10 @@
 
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
-
 session_start();
 
-$entryField = isset($_POST['entryField']) ? intval($_POST['entryField']) : '';
-$result = isset($_POST['result']) ? intval($_POST['result']) : '';
+$entryField = isset($_POST['entryField']) ? $_POST['entryField'] : null;
+$result = isset($_POST['result']) ? intval($_POST['result']) : null;
 
 if (isset($_POST['seven'])) {
     $entryField .= 7;
@@ -34,6 +33,7 @@ if (isset($_POST['six'])) {
 }
 if (isset($_POST['one'])) {
     $entryField .= 1;
+    var_dump($entryField);
 }
 if (isset($_POST['two'])) {
     $entryField .= 2;
@@ -50,12 +50,14 @@ if (isset($_POST['point'])) {
 }
 if (isset($_POST['plus'])) {
     $result = $entryField;
-    $entryField = 0;
+    $entryField = null;
+    var_dump($entryField);
 }
 
 if (isset($_POST['equally'])) {
     $entryField += $result;
-    $result = 0;
+    $result = null;
+    var_dump($entryField);
 }
 
 if (isset($_GET['logout']) > 0) {
