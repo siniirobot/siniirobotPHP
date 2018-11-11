@@ -13,10 +13,19 @@ function auth($login, $pass) {
     return false;
 }
 
-function plus($data) {
-    $summ = 0;
-    foreach ($data as $value) {
-        $summ += $value;
-    }
-    return $summ;
+function plus($firstNumber,$secondNumber) {
+    return $firstNumber + $secondNumber;
 }
+
+function minus($firstNumber,$secondNumber) {
+    return $firstNumber - $secondNumber;
+}
+
+function multiply($firstNumber,$secondNumber) {
+    return $firstNumber * $secondNumber;
+}
+
+function division($firstNumber,$secondNumber) {
+    return $firstNumber / $secondNumber;
+}
+
