@@ -16,8 +16,16 @@ $firstNumber = isset($_POST['firstNumber']) ? $_POST['firstNumber'] : null;
 $secondNumber = isset($_POST['secondNumber']) ? $_POST['secondNumber'] : null;
 $showResult = isset($showResult) ? $showResult : $firstNumber;
 $count = isset($_POST['count']) ? (int)$_POST['count'] : 0;
-
 $lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null;
+
+if (isset($_POST['clear'])) {
+    $firstNumber = null;
+    $secondNumber = null;
+    $count = 0;
+    $lastSign = null;
+    $showResult = null;
+}
+
 
 if (isset($_POST['seven'])) {
     $firstNumber .= 7;
@@ -55,41 +63,108 @@ if (isset($_POST['point'])) {
     }
 }
 
-if (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply'])) {
-    echo 'меню выбора';
-    if (isset($_POST['plus']) && $count === 0) {
-        echo 'первый плюс';
+echo 'Начало '.$lastSign.'</br>';
+echo 'Начало '.$firstNumber.'</br>';
+echo 'Начало '.$secondNumber.'</br>';
+echo 'Начало '.$showResult.'</br>';
+
+if (isset($_POST['changeSign'])) {
+
+}
+
+
+if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
+
+    if ($count > 0 && $lastSign == '+') {
+        echo 'второй плюс '.$lastSign.'</br>';
+        echo 'второй плюс '.$firstNumber.'</br>';
+        echo 'второй плюс '.$secondNumber.'</br>';
+        echo 'второй плюс '.$showResult.'</br>';
+        if (!(isset($_POST['plus']))) {
+            if (isset($_POST['minus'])){
+                echo 'второй плюс на минус'.$lastSign.'</br>';
+                echo 'второй плюс на минус '.$firstNumber.'</br>';
+                echo 'второй плюс на минус '.$secondNumber.'</br>';
+                echo 'второй плюс на минус '.$showResult.'</br>';
+                $lastSign = '-';
+                $showResult = $showResult = plus($firstNumber,$secondNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        }
+        $showResult = plus($firstNumber,$secondNumber);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    }elseif ($count > 0 && $lastSign == '-') {
+        echo 'второй минус '.$lastSign.'</br>';
+        echo 'второй минус '.$firstNumber.'</br>';
+        echo 'второй минус '.$secondNumber.'</br>';
+        echo 'второй минус '.$showResult.'</br>';
+        if (!(isset($_POST['minus']))) {
+            if (isset($_POST['plus'])){
+                echo 'второй минус на плюс '.$lastSign.'</br>';
+                echo 'второй минус на плюс '.$firstNumber.'</br>';
+                echo 'второй минус на плюс '.$secondNumber.'</br>';
+                echo 'второй минус на плюс '.$showResult.'</br>';
+                $lastSign = '+';
+                $showResult = $showResult =minus($secondNumber,$firstNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        }
+        $showResult = minus($secondNumber,$firstNumber);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    }
+}
+
+if ($lastSign == null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
+
+    if (isset($_POST['plus']) && $count == 0) {
+        echo 'Первый плюс '.$lastSign.'</br>';
+        echo 'Первый плюс '.$firstNumber.'</br>';
+        echo 'Первый плюс '.$secondNumber.'</br>';
+        echo 'Первый плюс '.$showResult.'</br>';
         $secondNumber = $firstNumber;
         $firstNumber = null;
         $count++;
         $lastSign = '+';
-    }elseif ($count > 0 && $lastSign == '+') {
-        $showResult = plus($firstNumber,$secondNumber);
-        $secondNumber = $showResult;
-        $firstNumber = null;
     }
-
-    if (isset($_POST['minus']) && $count === 0) {
+    if (isset($_POST['minus']) && $count == 0) {
+        echo 'Первый минус '.$lastSign.'</br>';
+        echo 'Первый минус '.$firstNumber.'</br>';
+        echo 'Первый минус '.$secondNumber.'</br>';
+        echo 'Первый минус '.$showResult.'</br>';
         $secondNumber = $firstNumber;
         $firstNumber = null;
         $count++;
         $lastSign = '-';
-    }elseif ($count > 0 && $lastSign == '-') {
+    }
+}
+
+if (isset($_POST['equally'])) {
+    if ($lastSign == '+') {
+        echo 'Равно плюс '.$lastSign.'</br>';
+        echo 'Равно плюс '.$firstNumber.'</br>';
+        echo 'Равно плюс '.$secondNumber.'</br>';
+        echo 'Равно плюс '.$showResult.'</br>';
+        $showResult = plus($firstNumber,$secondNumber);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    }elseif($lastSign == '-'){
+        echo 'Равно минус '.$lastSign.'</br>';
+        echo 'Равно минус '.$firstNumber.'</br>';
+        echo 'Равно минус '.$secondNumber.'</br>';
+        echo 'Равно минус '.$showResult.'</br>';
         $showResult = minus($secondNumber,$firstNumber);
         $secondNumber = $showResult;
         $firstNumber = null;
-        var_dump($showResult);
     }
-
 }
-
-if (isset($_POST['clear'])) {
-    $firstNumber = null;
-    $secondNumber = null;
-    $count = 0;
-    $lastSign = null;
-    $showResult = null;
-}
+echo 'Конец '.$lastSign.'</br>';
+echo 'Конец '.$firstNumber.'</br>';
+echo 'Конец '.$secondNumber.'</br>';
+echo 'Конец '.$showResult.'</br>';
 
 if (isset($_GET['logout']) > 0) {
     session_destroy();
@@ -101,9 +176,10 @@ if (isset($_GET['logout']) > 0) {
     <html>
     <head>
         <title>Личный кабинет</title>
+
     </head>
     <body>
-    <div style="width: 105px;height: 130px">
+    <div style="width: 105px;height: 150px">
         <form action="calc.php" method="post">
             <input type="hidden" name="lastSign" value="<?= $lastSign; ?>">
             <input type="hidden" name="firstNumber" value="<?= $firstNumber; ?>">
@@ -132,6 +208,7 @@ if (isset($_GET['logout']) > 0) {
             <input type="submit" name="point" value=".">
             <input type="submit" name="plus" value="+">
             <input type="submit" name="equally" value="=">
+            <input type="submit" name="changeSign" value="-/+" style="width: 100%">
         </form>
     </div>
 
