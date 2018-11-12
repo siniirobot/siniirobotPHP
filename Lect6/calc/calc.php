@@ -15,17 +15,27 @@ require_once __DIR__ . '/function.php';
 $firstNumber = isset($_POST['firstNumber']) ? $_POST['firstNumber'] : null;
 $secondNumber = isset($_POST['secondNumber']) ? $_POST['secondNumber'] : null;
 $showResult = isset($showResult) ? $showResult : $firstNumber;
-$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;
+$count = isset($_POST['count']) ? $_POST['count'] : false;
 $lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null;
+$equal = isset($_POST['lastEqual']) ? $_POST['lastEqual'] : false;
 
 if (isset($_POST['clear'])) {
     $firstNumber = null;
     $secondNumber = null;
-    $count = 0;
+    $count = false;
     $lastSign = null;
     $showResult = null;
 }
 
+if ($equal && (isset($_POST['seven'])) || isset($_POST['eight']) || isset($_POST['nine']) ||
+    isset($_POST['six']) || isset($_POST['five']) || isset($_POST['four']) || isset($_POST['three']) || isset($_POST['two'])
+    || isset($_POST['one'])){
+    $secondNumber = null;
+    $count = false;
+    $lastSign = null;
+    $showResult = null;
+    $equal = false;
+}
 
 if (isset($_POST['seven'])) {
     $firstNumber .= 7;
@@ -63,108 +73,303 @@ if (isset($_POST['point'])) {
     }
 }
 
-echo 'Начало '.$lastSign.'</br>';
-echo 'Начало '.$firstNumber.'</br>';
-echo 'Начало '.$secondNumber.'</br>';
-echo 'Начало '.$showResult.'</br>';
+
+echo 'Начало ' . $lastSign . '</br>';
+echo 'Начало ' . $firstNumber . '</br>';
+echo 'Начало ' . $secondNumber . '</br>';
+echo 'Начало ' . $showResult . '</br>';
 
 if (isset($_POST['changeSign'])) {
-
+    if ($firstNumber == null){
+        $secondNumber *= -1;
+    }else{
+        $firstNumber *= -1;
+    }
 }
 
 
 if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
-
-    if ($count > 0 && $lastSign == '+') {
-        echo 'второй плюс '.$lastSign.'</br>';
-        echo 'второй плюс '.$firstNumber.'</br>';
-        echo 'второй плюс '.$secondNumber.'</br>';
-        echo 'второй плюс '.$showResult.'</br>';
+    if ($count  && $lastSign == '+') {
+        echo 'второй плюс ' . $lastSign . '</br>';
+        echo 'второй плюс ' . $firstNumber . '</br>';
+        echo 'второй плюс ' . $secondNumber . '</br>';
+        echo 'второй плюс ' . $showResult . '</br>';
         if (!(isset($_POST['plus']))) {
-            if (isset($_POST['minus'])){
-                echo 'второй плюс на минус'.$lastSign.'</br>';
-                echo 'второй плюс на минус '.$firstNumber.'</br>';
-                echo 'второй плюс на минус '.$secondNumber.'</br>';
-                echo 'второй плюс на минус '.$showResult.'</br>';
+            if (isset($_POST['minus'])) {
+                echo 'второй плюс на минус' . $lastSign . '</br>';
+                echo 'второй плюс на минус ' . $firstNumber . '</br>';
+                echo 'второй плюс на минус ' . $secondNumber . '</br>';
+                echo 'второй плюс на минус ' . $showResult . '</br>';
                 $lastSign = '-';
-                $showResult = $showResult = plus($firstNumber,$secondNumber);
+                $showResult = $showResult = plus($firstNumber, $secondNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['division'])) {
+                echo 'второй плюс на деление ' . $lastSign . '</br>';
+                echo 'второй плюс на деление ' . $firstNumber . '</br>';
+                echo 'второй плюс на деление ' . $secondNumber . '</br>';
+                echo 'второй плюс на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+                if ($firstNumber == 0) {
+                    $showResult = 'Деление на ноль невозможно';
+                    $firstNumber = null;
+                    $secondNumber = null;
+                    $lastSign = null;
+                    $count = false;
+                }else{
+                    $showResult = plus($secondNumber,$firstNumber);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            }elseif (isset($_POST['multiply'])){
+                echo 'второй плюс на умножить' . $lastSign . '</br>';
+                echo 'второй плюс на умножить ' . $firstNumber . '</br>';
+                echo 'второй плюс на умножить ' . $secondNumber . '</br>';
+                echo 'второй плюс на умножить ' . $showResult . '</br>';
+                $lastSign = '*';
+                $showResult = plus($firstNumber, $secondNumber);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             }
+        }else{
+            $showResult = plus($firstNumber, $secondNumber);
+            $secondNumber = $showResult;
+            $firstNumber = null;
         }
-        $showResult = plus($firstNumber,$secondNumber);
-        $secondNumber = $showResult;
-        $firstNumber = null;
-    }elseif ($count > 0 && $lastSign == '-') {
-        echo 'второй минус '.$lastSign.'</br>';
-        echo 'второй минус '.$firstNumber.'</br>';
-        echo 'второй минус '.$secondNumber.'</br>';
-        echo 'второй минус '.$showResult.'</br>';
+
+    } elseif ($count && $lastSign == '-') {
+        echo 'второй минус ' . $lastSign . '</br>';
+        echo 'второй минус ' . $firstNumber . '</br>';
+        echo 'второй минус ' . $secondNumber . '</br>';
+        echo 'второй минус ' . $showResult . '</br>';
         if (!(isset($_POST['minus']))) {
-            if (isset($_POST['plus'])){
-                echo 'второй минус на плюс '.$lastSign.'</br>';
-                echo 'второй минус на плюс '.$firstNumber.'</br>';
-                echo 'второй минус на плюс '.$secondNumber.'</br>';
-                echo 'второй минус на плюс '.$showResult.'</br>';
+            if (isset($_POST['plus'])) {
+                echo 'второй минус на плюс ' . $lastSign . '</br>';
+                echo 'второй минус на плюс ' . $firstNumber . '</br>';
+                echo 'второй минус на плюс ' . $secondNumber . '</br>';
+                echo 'второй минус на плюс ' . $showResult . '</br>';
                 $lastSign = '+';
-                $showResult = $showResult =minus($secondNumber,$firstNumber);
+                $showResult =  minus($secondNumber, $firstNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['division'])) {
+                echo 'второй минус на деление ' . $lastSign . '</br>';
+                echo 'второй минус на деление ' . $firstNumber . '</br>';
+                echo 'второй минус на деление ' . $secondNumber . '</br>';
+                echo 'второй минус на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+                if ($firstNumber == 0) {
+                    $showResult = 'Деление на ноль невозможно';
+                    $firstNumber = null;
+                    $secondNumber = null;
+                    $lastSign = null;
+                    $count = false;
+                }else{
+                    $showResult = minus($secondNumber,$firstNumber);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            }elseif (isset($_POST['multiply'])){
+                echo 'второй минус на умножить' . $lastSign . '</br>';
+                echo 'второй минус на умножить ' . $firstNumber . '</br>';
+                echo 'второй минус на умножить ' . $secondNumber . '</br>';
+                echo 'второй минус на умножить ' . $showResult . '</br>';
+                $lastSign = '*';
+                $showResult = minus($firstNumber, $secondNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        }else{
+            $showResult = minus($secondNumber, $firstNumber);
+            $secondNumber = $showResult;
+            $firstNumber = null;
+        }
+    }elseif ($count && $lastSign == '/') {
+        echo 'второе деление ' . $lastSign . '</br>';
+        echo 'второе деление ' . $firstNumber . '</br>';
+        echo 'второе деление ' . $secondNumber . '</br>';
+        echo 'второе деление ' . $showResult . '</br>';
+        if(!isset($_POST['division'])) {
+            if (isset($_POST['plus'])) {
+                echo 'второй деление на плюс ' . $lastSign . '</br>';
+                echo 'второй деление на плюс ' . $firstNumber . '</br>';
+                echo 'второй деление на плюс ' . $secondNumber . '</br>';
+                echo 'второй деление на плюс ' . $showResult . '</br>';
+                $lastSign = '+';
+                $showResult = division($secondNumber,$firstNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['minus'])) {
+                echo 'второй деление на минус' . $lastSign . '</br>';
+                echo 'второй деление на минус ' . $firstNumber . '</br>';
+                echo 'второй деление на минус ' . $secondNumber . '</br>';
+                echo 'второй деление на минус ' . $showResult . '</br>';
+                $lastSign = '-';
+                $showResult = $showResult = division($secondNumber,$firstNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['multiply'])){
+                echo 'второй деление на умножить' . $lastSign . '</br>';
+                echo 'второй деление на умножить ' . $firstNumber . '</br>';
+                echo 'второй деление на умножить ' . $secondNumber . '</br>';
+                echo 'второй деление на умножить ' . $showResult . '</br>';
+                $lastSign = '*';
+                $showResult = division($secondNumber,$firstNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        }else{
+            if ($firstNumber == 0) {
+                $showResult = 'Деление на ноль невозможно';
+                $firstNumber = null;
+                $secondNumber = null;
+                $lastSign = null;
+                $count = false;
+            }else{
+                $showResult = division($secondNumber,$firstNumber);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             }
         }
-        $showResult = minus($secondNumber,$firstNumber);
+    }elseif ($count  && $lastSign == '*') {
+        echo 'второe умножение ' . $lastSign . '</br>';
+        echo 'второe умножение ' . $firstNumber . '</br>';
+        echo 'второe умножение ' . $secondNumber . '</br>';
+        echo 'второe умножение ' . $showResult . '</br>';
+        if (!(isset($_POST['multiply']))) {
+            if (isset($_POST['plus'])) {
+                echo 'второй умножение на плюс ' . $lastSign . '</br>';
+                echo 'второй умножение на плюс ' . $firstNumber . '</br>';
+                echo 'второй умножение на плюс ' . $secondNumber . '</br>';
+                echo 'второй умножение на плюс ' . $showResult . '</br>';
+                $lastSign = '+';
+                $showResult =  multiply($firstNumber, $secondNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['minus'])) {
+                echo 'второй умножение на минус' . $lastSign . '</br>';
+                echo 'второй умножение на минус ' . $firstNumber . '</br>';
+                echo 'второй умножение на минус ' . $secondNumber . '</br>';
+                echo 'второй умножение на минус ' . $showResult . '</br>';
+                $lastSign = '-';
+                $showResult =  multiply($firstNumber, $secondNumber);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }elseif (isset($_POST['division'])) {
+                echo 'второй умножение на деление ' . $lastSign . '</br>';
+                echo 'второй умножение на деление ' . $firstNumber . '</br>';
+                echo 'второй умножение на деление ' . $secondNumber . '</br>';
+                echo 'второй умножение на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+                if ($firstNumber == 0) {
+                    $showResult = 'Деление на ноль невозможно';
+                    $firstNumber = null;
+                    $secondNumber = null;
+                    $lastSign = null;
+                    $count = false;
+                }else{
+                    $showResult =  multiply($firstNumber, $secondNumber);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            }
+        }
+    }else{
+        $showResult = multiply($firstNumber, $secondNumber);
         $secondNumber = $showResult;
         $firstNumber = null;
     }
 }
 
 if ($lastSign == null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
-
-    if (isset($_POST['plus']) && $count == 0) {
-        echo 'Первый плюс '.$lastSign.'</br>';
-        echo 'Первый плюс '.$firstNumber.'</br>';
-        echo 'Первый плюс '.$secondNumber.'</br>';
-        echo 'Первый плюс '.$showResult.'</br>';
+    if (isset($_POST['plus']) && !$count) {
+        echo 'Первый плюс ' . $lastSign . '</br>';
+        echo 'Первый плюс ' . $firstNumber . '</br>';
+        echo 'Первый плюс ' . $secondNumber . '</br>';
+        echo 'Первый плюс ' . $showResult . '</br>';
         $secondNumber = $firstNumber;
         $firstNumber = null;
-        $count++;
+        $count = true;
         $lastSign = '+';
-    }
-    if (isset($_POST['minus']) && $count == 0) {
-        echo 'Первый минус '.$lastSign.'</br>';
-        echo 'Первый минус '.$firstNumber.'</br>';
-        echo 'Первый минус '.$secondNumber.'</br>';
-        echo 'Первый минус '.$showResult.'</br>';
+    }elseif (isset($_POST['minus']) && !$count) {
+        echo 'Первый минус ' . $lastSign . '</br>';
+        echo 'Первый минус ' . $firstNumber . '</br>';
+        echo 'Первый минус ' . $secondNumber . '</br>';
+        echo 'Первый минус ' . $showResult . '</br>';
         $secondNumber = $firstNumber;
         $firstNumber = null;
-        $count++;
+        $count = true;
         $lastSign = '-';
+    }elseif (isset($_POST['division']) && !$count ) {
+        echo 'Первое деление ' . $lastSign . '</br>';
+        echo 'Первое деление' . $firstNumber . '</br>';
+        echo 'Первое деление' . $secondNumber . '</br>';
+        echo 'Первое деление' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
+        $lastSign = '/';
+    }elseif (isset($_POST['multiply']) && !$count) {
+        echo 'Первое умножение ' . $lastSign . '</br>';
+        echo 'Первое умножение' . $firstNumber . '</br>';
+        echo 'Первое умножение' . $secondNumber . '</br>';
+        echo 'Первое умножение' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
+        $lastSign = '*';
     }
+
 }
 
 if (isset($_POST['equally'])) {
+    $equal = true;
     if ($lastSign == '+') {
-        echo 'Равно плюс '.$lastSign.'</br>';
-        echo 'Равно плюс '.$firstNumber.'</br>';
-        echo 'Равно плюс '.$secondNumber.'</br>';
-        echo 'Равно плюс '.$showResult.'</br>';
-        $showResult = plus($firstNumber,$secondNumber);
+        echo 'Равно плюс ' . $lastSign . '</br>';
+        echo 'Равно плюс ' . $firstNumber . '</br>';
+        echo 'Равно плюс ' . $secondNumber . '</br>';
+        echo 'Равно плюс ' . $showResult . '</br>';
+        $showResult = plus($firstNumber, $secondNumber);
         $secondNumber = $showResult;
         $firstNumber = null;
-    }elseif($lastSign == '-'){
-        echo 'Равно минус '.$lastSign.'</br>';
-        echo 'Равно минус '.$firstNumber.'</br>';
-        echo 'Равно минус '.$secondNumber.'</br>';
-        echo 'Равно минус '.$showResult.'</br>';
-        $showResult = minus($secondNumber,$firstNumber);
+    } elseif ($lastSign == '-') {
+        echo 'Равно минус ' . $lastSign . '</br>';
+        echo 'Равно минус ' . $firstNumber . '</br>';
+        echo 'Равно минус ' . $secondNumber . '</br>';
+        echo 'Равно минус ' . $showResult . '</br>';
+        $showResult = minus($secondNumber, $firstNumber);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    }elseif ($lastSign == '/') {
+        echo 'Равно деление ' . $lastSign . '</br>';
+        echo 'Равно деление ' . $firstNumber . '</br>';
+        echo 'Равно деление ' . $secondNumber . '</br>';
+        echo 'Равно деление ' . $showResult . '</br>';
+        if ($firstNumber == 0) {
+            $showResult = 'Деление на ноль невозможно';
+            $firstNumber = null;
+            $secondNumber = null;
+            $lastSign = null;
+            $count = false;
+        }else{
+            $showResult = division($secondNumber,$firstNumber);
+            $secondNumber = $showResult;
+            $firstNumber = null;
+        }
+    }elseif ($lastSign == '*') {
+        echo 'Равно умножить ' . $lastSign . '</br>';
+        echo 'Равно умножить  ' . $firstNumber . '</br>';
+        echo 'Равно умножить  ' . $secondNumber . '</br>';
+        echo 'Равно умножить  ' . $showResult . '</br>';
+        $showResult = multiply($secondNumber,$firstNumber);
         $secondNumber = $showResult;
         $firstNumber = null;
     }
 }
-echo 'Конец '.$lastSign.'</br>';
-echo 'Конец '.$firstNumber.'</br>';
-echo 'Конец '.$secondNumber.'</br>';
-echo 'Конец '.$showResult.'</br>';
+echo 'Конец ' . $lastSign . '</br>';
+echo 'Конец ' . $firstNumber . '</br>';
+echo 'Конец ' . $secondNumber . '</br>';
+echo 'Конец ' . $showResult . '</br>';
 
 if (isset($_GET['logout']) > 0) {
     session_destroy();
@@ -181,11 +386,13 @@ if (isset($_GET['logout']) > 0) {
     <body>
     <div style="width: 105px;height: 150px">
         <form action="calc.php" method="post">
+            <input type="hidden" name="lastEqual" value="<?= $equal; ?>">
             <input type="hidden" name="lastSign" value="<?= $lastSign; ?>">
             <input type="hidden" name="firstNumber" value="<?= $firstNumber; ?>">
             <input type="hidden" name="secondNumber" value="<?= $secondNumber; ?>">
             <input type="hidden" name="count" value="<?= $count; ?>">
-            <input type="text" name="entryField"  value="<?= $firstNumber; ?>" placeholder="<?= $showResult; ?>" style="width: 100%">
+            <input type="text" name="entryField" value="<?= $firstNumber; ?>" placeholder="<?= $showResult; ?>"
+                   style="width: 100%">
             <br>
             <input type="submit" name="clear" value="C" style="width: 100%">
             <br>
