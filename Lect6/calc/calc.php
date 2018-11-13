@@ -10,14 +10,20 @@ header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 session_start();
 
+
 require_once __DIR__ . '/function.php';
 
+$file = 'math.txt';
 $firstNumber = isset($_POST['firstNumber']) ? $_POST['firstNumber'] : null;
 $secondNumber = isset($_POST['secondNumber']) ? $_POST['secondNumber'] : null;
-$showResult = isset($showResult) ? $showResult : $firstNumber;
-$count = isset($_POST['count']) ? $_POST['count'] : false;
-$lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null;
-$equal = isset($_POST['lastEqual']) ? $_POST['lastEqual'] : false;
+$showResult = isset($showResult) ? $showResult : $firstNumber; // Выводит результат в поле ввода
+$count = isset($_POST['count']) ? $_POST['count'] : false;// Был ли нажат второй знак
+$lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null; // Последний знак который был нажат
+$equal = isset($_POST['lastEqual']) ? $_POST['lastEqual'] : false;// Была ли нажата кнопка равно
+
+/**
+ * Функция очистки всех переменных.
+ */
 
 if (isset($_POST['clear'])) {
     $firstNumber = null;
@@ -25,8 +31,12 @@ if (isset($_POST['clear'])) {
     $count = false;
     $lastSign = null;
     $showResult = null;
+    $equal = null;
 }
 
+/**
+ * Если мы хотим после вывода результата написать новое выражение то не обходимо что бы $equal было true
+ */
 if (($equal && isset($_POST['seven'])) || ($equal && isset($_POST['eight'])) || ($equal && isset($_POST['nine'])) ||
     ($equal && isset($_POST['six'])) || ($equal && isset($_POST['five'])) || ($equal && isset($_POST['four'])) ||
     ($equal && isset($_POST['three'])) || ($equal && isset($_POST['two'])) || ($equal && isset($_POST['one']))) {
@@ -36,6 +46,10 @@ if (($equal && isset($_POST['seven'])) || ($equal && isset($_POST['eight'])) || 
     $showResult = null;
     $equal = false;
 }
+
+/**
+ * Вывод чисел и точки
+ */
 
 if (isset($_POST['seven'])) {
     $firstNumber .= 7;
@@ -73,6 +87,15 @@ if (isset($_POST['point'])) {
     }
 }
 
+echo 'Начало ' . $lastSign . '</br>';
+echo 'Начало ' . $firstNumber . '</br>';
+echo 'Начало ' . $secondNumber . '</br>';
+echo 'Начало ' . $showResult . '</br>';
+
+/**
+ *Функция смены знака с положительного на отрицательный и наоборот.
+ */
+
 if (isset($_POST['changeSign'])) {
     if ($firstNumber == null) {
         $secondNumber *= -1;
@@ -81,75 +104,158 @@ if (isset($_POST['changeSign'])) {
     }
 }
 
+/**
+ *Функция смены знака с положительного на отрицательный и наоборот.
+ */
+
 if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
     $equal = false;
+    echo 'Заходим сюда';
     if ($count && $lastSign == '+') {
+        // операции над знаком плюс
+        echo 'второй плюс ' . $lastSign . '</br>';
+        echo 'второй плюс ' . $firstNumber . '</br>';
+        echo 'второй плюс ' . $secondNumber . '</br>';
+        echo 'второй плюс ' . $showResult . '</br>';
         if (!(isset($_POST['plus']))) {
+            // если последний нажатый знак не плюс , то выполняется функция plus и идет смена lastSign для последующей операции
             if (isset($_POST['minus'])) {
+                // операции с минусом при смене  с плюса на минус
+                echo 'второй плюс на минус' . $lastSign . '</br>';
+                echo 'второй плюс на минус ' . $firstNumber . '</br>';
+                echo 'второй плюс на минус ' . $secondNumber . '</br>';
+                echo 'второй плюс на минус ' . $showResult . '</br>';
                 $lastSign = '-';
                 $showResult = $showResult = plus($firstNumber, $secondNumber);
+                file_put_contents($file, $secondNumber . '+' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             } elseif (isset($_POST['division'])) {
+                // операции с делением при смене с плюса на деление
+                echo 'второй плюс на деление ' . $lastSign . '</br>';
+                echo 'второй плюс на деление ' . $firstNumber . '</br>';
+                echo 'второй плюс на деление ' . $secondNumber . '</br>';
+                echo 'второй плюс на деление ' . $showResult . '</br>';
                 $lastSign = '/';
                 $showResult = plus($secondNumber, $firstNumber);
+                file_put_contents($file, $secondNumber . '+' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
+
             } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с плюса на умножение
+                echo 'второй плюс на умножить' . $lastSign . '</br>';
+                echo 'второй плюс на умножить ' . $firstNumber . '</br>';
+                echo 'второй плюс на умножить ' . $secondNumber . '</br>';
+                echo 'второй плюс на умножить ' . $showResult . '</br>';
                 $lastSign = '*';
                 $showResult = plus($firstNumber, $secondNumber);
+                file_put_contents($file, $secondNumber . '+' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             }
         } else {
             $showResult = plus($firstNumber, $secondNumber);
+            file_put_contents($file, $secondNumber . '+' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
             $secondNumber = $showResult;
             $firstNumber = null;
         }
 
     } elseif ($count && $lastSign == '-') {
+        // операции с минусом
+        echo 'второй минус ' . $lastSign . '</br>';
+        echo 'второй минус ' . $firstNumber . '</br>';
+        echo 'второй минус ' . $secondNumber . '</br>';
+        echo 'второй минус ' . $showResult . '</br>';
         if (!(isset($_POST['minus']))) {
+            // если последний нажатый знак не минус , то выполняется функция minus и идет смена lastSign для последующей операции
             if (isset($_POST['plus'])) {
+                // операции с плюсом при смене  с минуса на плюс
+                echo 'второй минус на плюс ' . $lastSign . '</br>';
+                echo 'второй минус на плюс ' . $firstNumber . '</br>';
+                echo 'второй минус на плюс ' . $secondNumber . '</br>';
+                echo 'второй минус на плюс ' . $showResult . '</br>';
                 $lastSign = '+';
                 $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file, $secondNumber . '-' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             } elseif (isset($_POST['division'])) {
+                // операции с делением при смене  с минуса на деление
+                echo 'второй минус на деление ' . $lastSign . '</br>';
+                echo 'второй минус на деление ' . $firstNumber . '</br>';
+                echo 'второй минус на деление ' . $secondNumber . '</br>';
+                echo 'второй минус на деление ' . $showResult . '</br>';
                 $lastSign = '/';
+
                 $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file, $secondNumber . '-' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
+
             } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с минуса на умножение
+                echo 'второй минус на умножить' . $lastSign . '</br>';
+                echo 'второй минус на умножить ' . $firstNumber . '</br>';
+                echo 'второй минус на умножить ' . $secondNumber . '</br>';
+                echo 'второй минус на умножить ' . $showResult . '</br>';
                 $lastSign = '*';
-                $showResult = minus($firstNumber, $secondNumber);
+                $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file, $secondNumber . '-' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             }
         } else {
             $showResult = minus($secondNumber, $firstNumber);
+            file_put_contents($file, $secondNumber . '-' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
             $secondNumber = $showResult;
             $firstNumber = null;
         }
     } elseif ($count && $lastSign == '/') {
+        // операции с делением
+        echo 'второе деление ' . $lastSign . '</br>';
+        echo 'второе деление ' . $firstNumber . '</br>';
+        echo 'второе деление ' . $secondNumber . '</br>';
+        echo 'второе деление ' . $showResult . '</br>';
         if (!isset($_POST['division'])) {
+            // если последний нажатый знак не деление, то выполняется функция division и идет смена lastSign для последующей операции
             if (isset($_POST['plus'])) {
+                // операции с плюсом при смене  с деления на плюс
+                echo 'второй деление на плюс ' . $lastSign . '</br>';
+                echo 'второй деление на плюс ' . $firstNumber . '</br>';
+                echo 'второй деление на плюс ' . $secondNumber . '</br>';
+                echo 'второй деление на плюс ' . $showResult . '</br>';
                 $lastSign = '+';
                 if ($firstNumber != null) {
                     $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                     $secondNumber = $showResult;
                     $firstNumber = null;
                 }
             } elseif (isset($_POST['minus'])) {
+                // операции с минусом при смене  с деления на минус
+                echo 'второй деление на минус' . $lastSign . '</br>';
+                echo 'второй деление на минус ' . $firstNumber . '</br>';
+                echo 'второй деление на минус ' . $secondNumber . '</br>';
+                echo 'второй деление на минус ' . $showResult . '</br>';
                 $lastSign = '-';
                 if ($firstNumber != null) {
                     $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                     $secondNumber = $showResult;
                     $firstNumber = null;
                 }
             } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с деления на умножение
+                echo 'второй деление на умножить' . $lastSign . '</br>';
+                echo 'второй деление на умножить ' . $firstNumber . '</br>';
+                echo 'второй деление на умножить ' . $secondNumber . '</br>';
+                echo 'второй деление на умножить ' . $showResult . '</br>';
+
                 $lastSign = '*';
                 if ($firstNumber != null) {
                     $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                     $secondNumber = $showResult;
                     $firstNumber = null;
                 }
@@ -157,106 +263,159 @@ if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || iss
         } else {
             if ($firstNumber === 0) {
                 $showResult = 'Деление на ноль невозможно';
+                file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $firstNumber = null;
                 $secondNumber = null;
                 $lastSign = null;
                 $count = false;
             } elseif ($firstNumber != null) {
                 $showResult = division($secondNumber, $firstNumber);
+                file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
             }
         }
     } elseif ($count && $lastSign == '*') {
         if (!(isset($_POST['multiply']))) {
+            // если последний нажатый знак не умножение , то выполняется функция multiply и идет смена lastSign для последующей операции
             if (isset($_POST['plus'])) {
                 $lastSign = '+';
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
             } elseif (isset($_POST['minus'])) {
                 $lastSign = '-';
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
             } elseif (isset($_POST['division'])) {
                 $lastSign = '/';
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
             }
         }
-    } else {
-        $showResult = multiply($firstNumber, $secondNumber);
-        $secondNumber = $showResult;
-        $firstNumber = null;
+        if ($firstNumber != null) {
+            $showResult = multiply($firstNumber, $secondNumber);
+            file_put_contents($file, $secondNumber . '*' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
+            $secondNumber = $showResult;
+            $firstNumber = null;
+        }
+
     }
 }
 
-if ($lastSign == null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division'])
-        || isset($_POST['multiply'])) && !$count) {
+/**
+ *При первом вводе знака, необходимо дождатся следуйщего числа и сохранить введеный знак для определения последующей операции.
+ */
 
-    if (isset($_POST['plus'])) {
+if ($lastSign == null && (isset($_POST['plus']) || isset($_POST['minus'])
+        || isset($_POST['division']) || isset($_POST['multiply']))) {
+    $equal = false;
+    if (isset($_POST['plus']) && !$count) {
+
+        echo 'Первый плюс ' . $lastSign . '</br>';
+        echo 'Первый плюс ' . $firstNumber . '</br>';
+        echo 'Первый плюс ' . $secondNumber . '</br>';
+        echo 'Первый плюс ' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
         $lastSign = '+';
-    } elseif (isset($_POST['minus'])) {
+    } elseif (isset($_POST['minus']) && !$count) {
+        echo 'Первый минус ' . $lastSign . '</br>';
+        echo 'Первый минус ' . $firstNumber . '</br>';
+        echo 'Первый минус ' . $secondNumber . '</br>';
+        echo 'Первый минус ' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
         $lastSign = '-';
-    } elseif (isset($_POST['division'])) {
+    } elseif (isset($_POST['division']) && !$count) {
+        echo 'Первое деление ' . $lastSign . '</br>';
+        echo 'Первое деление' . $firstNumber . '</br>';
+        echo 'Первое деление' . $secondNumber . '</br>';
+        echo 'Первое деление' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
         $lastSign = '/';
-    } elseif (isset($_POST['multiply'])) {
+    } elseif (isset($_POST['multiply']) && !$count) {
+        echo 'Первое умножение ' . $lastSign . '</br>';
+        echo 'Первое умножение' . $firstNumber . '</br>';
+        echo 'Первое умножение' . $secondNumber . '</br>';
+        echo 'Первое умножение' . $showResult . '</br>';
+        $secondNumber = $firstNumber;
+        $firstNumber = null;
+        $count = true;
         $lastSign = '*';
     }
-
-    $secondNumber = $firstNumber;
-    $firstNumber = null;
-    $count = true;
-    $equal = false;
 }
 
-if (isset($_POST['equally'])) {
-    switch ($lastSign) {
-        case '+':
-            $showResult = plus($firstNumber, $secondNumber);
+/**
+ *Произведение операций при нажатии знака равно в зависимости от последнего нажатого знака.
+ */
+
+if (isset($_POST['equally']) && $secondNumber) {
+    if ($lastSign == '+') {
+        echo 'Равно плюс ' . $lastSign . '</br>';
+        echo 'Равно плюс ' . $firstNumber . '</br>';
+        echo 'Равно плюс ' . $secondNumber . '</br>';
+        echo 'Равно плюс ' . $showResult . '</br>';
+        $showResult = plus($firstNumber, $secondNumber);
+        file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+
+    } elseif ($lastSign == '-') {
+        echo 'Равно минус ' . $lastSign . '</br>';
+        echo 'Равно минус ' . $firstNumber . '</br>';
+        echo 'Равно минус ' . $secondNumber . '</br>';
+        echo 'Равно минус ' . $showResult . '</br>';
+        $showResult = minus($secondNumber, $firstNumber);
+        file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    } elseif ($lastSign == '/') {
+        echo 'Равно деление ' . $lastSign . '</br>';
+        echo 'Равно деление ' . $firstNumber . '</br>';
+        echo 'Равно деление ' . $secondNumber . '</br>';
+        echo 'Равно деление ' . $showResult . '</br>';
+        if ($firstNumber == 0) {
+            $showResult = 'Деление на ноль невозможно';
+            file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
+            $firstNumber = null;
+            $secondNumber = null;
+            $lastSign = null;
+            $count = false;
+        } else {
+            $showResult = division($secondNumber, $firstNumber);
+            file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
             $secondNumber = $showResult;
             $firstNumber = null;
-            break;
-        case '-':
-            $showResult = minus($secondNumber, $firstNumber);
-            $secondNumber = $showResult;
-            $firstNumber = null;
-            break;
-        case '/':
-            if ($firstNumber == 0) {
-                $showResult = 'Деление на ноль невозможно';
-                $firstNumber = null;
-                $secondNumber = null;
-                $lastSign = null;
-                $count = false;
-            } else {
-                $showResult = division($secondNumber, $firstNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            }
-            break;
-        case '*':
-            $showResult = multiply($secondNumber, $firstNumber);
-            $secondNumber = $showResult;
-            $firstNumber = null;
-            break;
+        }
+    } elseif ($lastSign == '*') {
+        echo 'Равно умножить ' . $lastSign . '</br>';
+        echo 'Равно умножить  ' . $firstNumber . '</br>';
+        echo 'Равно умножить  ' . $secondNumber . '</br>';
+        echo 'Равно умножить  ' . $showResult . '</br>';
+        $showResult = multiply($secondNumber, $firstNumber);
+        file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
+        $secondNumber = $showResult;
+        $firstNumber = null;
     }
     $equal = true;
 }
 
+echo 'Конец' . $lastSign . '</br>';
+echo 'Конец' . $firstNumber . '</br>';
+echo 'Конец' . $secondNumber . '</br>';
+echo 'Конец' . $showResult . '</br>';
+
+/**
+ *Разлогиниться
+ */
 if (isset($_GET['logout']) > 0) {
     session_destroy();
     header('Location:auth.php');
     exit();
 }
-?>
 
+?>
     <html>
     <head>
         <title>Личный кабинет</title>
-
     </head>
     <body>
     <div style="width: 105px;height: 150px">
@@ -376,49 +535,259 @@ if ($entryField == null && $result == null) {
 
 /*
  * второй вариант
- * if ($lastSign == '+') {
-        echo 'Равно плюс ' . $lastSign . '</br>';
-        echo 'Равно плюс ' . $firstNumber . '</br>';
-        echo 'Равно плюс ' . $secondNumber . '</br>';
-        echo 'Равно плюс ' . $showResult . '</br>';
-        $showResult = plus($firstNumber, $secondNumber);
-        $secondNumber = $showResult;
-        $firstNumber = null;
-    } elseif ($lastSign == '-') {
-        echo 'Равно минус ' . $lastSign . '</br>';
-        echo 'Равно минус ' . $firstNumber . '</br>';
-        echo 'Равно минус ' . $secondNumber . '</br>';
-        echo 'Равно минус ' . $showResult . '</br>';
-        $showResult = minus($secondNumber, $firstNumber);
-        $secondNumber = $showResult;
-        $firstNumber = null;
-    } elseif ($lastSign == '/') {
-        echo 'Равно деление ' . $lastSign . '</br>';
-        echo 'Равно деление ' . $firstNumber . '</br>';
-        echo 'Равно деление ' . $secondNumber . '</br>';
-        echo 'Равно деление ' . $showResult . '</br>';
-        if ($firstNumber == 0) {
-            $showResult = 'Деление на ноль невозможно';
-            $firstNumber = null;
-            $secondNumber = null;
-            $lastSign = null;
-            $count = false;
+echo 'Начало ' . $lastSign . '</br>';
+echo 'Начало ' . $firstNumber . '</br>';
+echo 'Начало ' . $secondNumber . '</br>';
+echo 'Начало ' . $showResult . '</br>';
+
+/**
+ *Функция смены знака с положительного на отрицательный и наоборот.
+ */
+/*
+if (isset($_POST['changeSign'])) {
+    if ($firstNumber == null) {
+        $secondNumber *= -1;
+    } else {
+        $firstNumber *= -1;
+    }
+}
+
+/**
+ *Функция смены знака с положительного на отрицательный и наоборот.
+ */
+/*
+if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
+    $equal = false;
+    if ($count && $lastSign == '+') {
+        // операции над знаком плюс
+        echo 'второй плюс ' . $lastSign . '</br>';
+        echo 'второй плюс ' . $firstNumber . '</br>';
+        echo 'второй плюс ' . $secondNumber . '</br>';
+        echo 'второй плюс ' . $showResult . '</br>';
+        if (!(isset($_POST['plus']))) {
+            // если последний нажатый знак не плюс , то выполняется функция plus и идет смена lastSign для последующей операции
+            if (isset($_POST['minus'])) {
+                // операции с минусом при смене  с плюса на минус
+                echo 'второй плюс на минус' . $lastSign . '</br>';
+                echo 'второй плюс на минус ' . $firstNumber . '</br>';
+                echo 'второй плюс на минус ' . $secondNumber . '</br>';
+                echo 'второй плюс на минус ' . $showResult . '</br>';
+                $lastSign = '-';
+                $showResult = $showResult = plus($firstNumber, $secondNumber);
+                file_put_contents($file,$secondNumber.'+'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            } elseif (isset($_POST['division'])) {
+                // операции с делением при смене с плюса на деление
+                echo 'второй плюс на деление ' . $lastSign . '</br>';
+                echo 'второй плюс на деление ' . $firstNumber . '</br>';
+                echo 'второй плюс на деление ' . $secondNumber . '</br>';
+                echo 'второй плюс на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+                $showResult = plus($secondNumber, $firstNumber);
+                file_put_contents($file,$secondNumber.'+'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+
+            } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с плюса на умножение
+                echo 'второй плюс на умножить' . $lastSign . '</br>';
+                echo 'второй плюс на умножить ' . $firstNumber . '</br>';
+                echo 'второй плюс на умножить ' . $secondNumber . '</br>';
+                echo 'второй плюс на умножить ' . $showResult . '</br>';
+                $lastSign = '*';
+                $showResult = plus($firstNumber, $secondNumber);
+                file_put_contents($file,$secondNumber.'+'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
         } else {
-            $showResult = division($secondNumber, $firstNumber);
+            $showResult = plus($firstNumber, $secondNumber);
+            file_put_contents($file,$secondNumber.'+'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
             $secondNumber = $showResult;
             $firstNumber = null;
         }
-    } elseif ($lastSign == '*') {
-        echo 'Равно умножить ' . $lastSign . '</br>';
-        echo 'Равно умножить  ' . $firstNumber . '</br>';
-        echo 'Равно умножить  ' . $secondNumber . '</br>';
-        echo 'Равно умножить  ' . $showResult . '</br>';
-        $showResult = multiply($secondNumber, $firstNumber);
+
+    } elseif ($count && $lastSign == '-') {
+        // операции с минусом
+        echo 'второй минус ' . $lastSign . '</br>';
+        echo 'второй минус ' . $firstNumber . '</br>';
+        echo 'второй минус ' . $secondNumber . '</br>';
+        echo 'второй минус ' . $showResult . '</br>';
+        if (!(isset($_POST['minus']))) {
+            // если последний нажатый знак не минус , то выполняется функция minus и идет смена lastSign для последующей операции
+            if (isset($_POST['plus'])) {
+                // операции с плюсом при смене  с минуса на плюс
+                echo 'второй минус на плюс ' . $lastSign . '</br>';
+                echo 'второй минус на плюс ' . $firstNumber . '</br>';
+                echo 'второй минус на плюс ' . $secondNumber . '</br>';
+                echo 'второй минус на плюс ' . $showResult . '</br>';
+                $lastSign = '+';
+                $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file,$secondNumber.'-'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            } elseif (isset($_POST['division'])) {
+                // операции с делением при смене  с минуса на деление
+                echo 'второй минус на деление ' . $lastSign . '</br>';
+                echo 'второй минус на деление ' . $firstNumber . '</br>';
+                echo 'второй минус на деление ' . $secondNumber . '</br>';
+                echo 'второй минус на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+
+                $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file,$secondNumber.'-'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+
+            } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с минуса на умножение
+                echo 'второй минус на умножить' . $lastSign . '</br>';
+                echo 'второй минус на умножить ' . $firstNumber . '</br>';
+                echo 'второй минус на умножить ' . $secondNumber . '</br>';
+                echo 'второй минус на умножить ' . $showResult . '</br>';
+                $lastSign = '*';
+                $showResult = minus($secondNumber, $firstNumber);
+                file_put_contents($file,$secondNumber.'-'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        } else {
+            $showResult = minus($secondNumber, $firstNumber);
+            file_put_contents($file,$secondNumber.'-'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+            $secondNumber = $showResult;
+            $firstNumber = null;
+        }
+    } elseif ($count && $lastSign == '/') {
+        // операции с делением
+        echo 'второе деление ' . $lastSign . '</br>';
+        echo 'второе деление ' . $firstNumber . '</br>';
+        echo 'второе деление ' . $secondNumber . '</br>';
+        echo 'второе деление ' . $showResult . '</br>';
+        if (!isset($_POST['division'])) {
+            // если последний нажатый знак не деление, то выполняется функция division и идет смена lastSign для последующей операции
+            if (isset($_POST['plus'])) {
+                // операции с плюсом при смене  с деления на плюс
+                echo 'второй деление на плюс ' . $lastSign . '</br>';
+                echo 'второй деление на плюс ' . $firstNumber . '</br>';
+                echo 'второй деление на плюс ' . $secondNumber . '</br>';
+                echo 'второй деление на плюс ' . $showResult . '</br>';
+                $lastSign = '+';
+                if ($firstNumber != null) {
+                    $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file,$secondNumber.'/'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            } elseif (isset($_POST['minus'])) {
+                // операции с минусом при смене  с деления на минус
+                echo 'второй деление на минус' . $lastSign . '</br>';
+                echo 'второй деление на минус ' . $firstNumber . '</br>';
+                echo 'второй деление на минус ' . $secondNumber . '</br>';
+                echo 'второй деление на минус ' . $showResult . '</br>';
+                $lastSign = '-';
+                if ($firstNumber != null) {
+                    $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file,$secondNumber.'/'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            } elseif (isset($_POST['multiply'])) {
+                // операции с умножением при смене  с деления на умножение
+                echo 'второй деление на умножить' . $lastSign . '</br>';
+                echo 'второй деление на умножить ' . $firstNumber . '</br>';
+                echo 'второй деление на умножить ' . $secondNumber . '</br>';
+                echo 'второй деление на умножить ' . $showResult . '</br>';
+
+                $lastSign = '*';
+                if ($firstNumber != null) {
+                    $showResult = division($secondNumber, $firstNumber);
+                    file_put_contents($file,$secondNumber.'/'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            }
+        } else {
+            if ($firstNumber === 0) {
+                $showResult = 'Деление на ноль невозможно';
+                file_put_contents($file,$secondNumber.'/'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $firstNumber = null;
+                $secondNumber = null;
+                $lastSign = null;
+                $count = false;
+            } elseif ($firstNumber != null) {
+                $showResult = division($secondNumber, $firstNumber);
+                file_put_contents($file,$secondNumber.'/'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                $secondNumber = $showResult;
+                $firstNumber = null;
+            }
+        }
+    } elseif ($count && $lastSign == '*') {
+        // операции с умножением
+        echo 'второe умножение ' . $lastSign . '</br>';
+        echo 'второe умножение ' . $firstNumber . '</br>';
+        echo 'второe умножение ' . $secondNumber . '</br>';
+        echo 'второe умножение ' . $showResult . '</br>';
+        if (!(isset($_POST['multiply']))) {
+            // если последний нажатый знак не умножение , то выполняется функция multiply и идет смена lastSign для последующей операции
+            if (isset($_POST['plus'])) {
+                // операции с плюсом при смене  с умножения на плюс
+                echo 'второй умножение на плюс ' . $lastSign . '</br>';
+                echo 'второй умножение на плюс ' . $firstNumber . '</br>';
+                echo 'второй умножение на плюс ' . $secondNumber . '</br>';
+                echo 'второй умножение на плюс ' . $showResult . '</br>';
+                $lastSign = '+';
+                if ($firstNumber != null) {
+                    $showResult = multiply($firstNumber, $secondNumber);
+                    file_put_contents($file,$secondNumber.'*'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            } elseif (isset($_POST['minus'])) {
+                // операции с минусом при смене  с умножения на минус
+                echo 'второй умножение на минус' . $lastSign . '</br>';
+                echo 'второй умножение на минус ' . $firstNumber . '</br>';
+                echo 'второй умножение на минус ' . $secondNumber . '</br>';
+                echo 'второй умножение на минус ' . $showResult . '</br>';
+                $lastSign = '-';
+                if ($firstNumber != null) {
+                    $showResult = multiply($firstNumber, $secondNumber);
+                    file_put_contents($file,$secondNumber.'*'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            } elseif (isset($_POST['division'])) {
+                // операции с делением при смене  с умножения на деление
+                echo 'второй умножение на деление ' . $lastSign . '</br>';
+                echo 'второй умножение на деление ' . $firstNumber . '</br>';
+                echo 'второй умножение на деление ' . $secondNumber . '</br>';
+                echo 'второй умножение на деление ' . $showResult . '</br>';
+                $lastSign = '/';
+                if ($firstNumber != null) {
+                    $showResult = multiply($firstNumber, $secondNumber);
+                    file_put_contents($file,$secondNumber.'*'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+                    $secondNumber = $showResult;
+                    $firstNumber = null;
+                }
+            }
+        }
+    } else {
+        $showResult = multiply($firstNumber, $secondNumber);
+        file_put_contents($file,$secondNumber.'*'.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
         $secondNumber = $showResult;
         $firstNumber = null;
     }
+}
 
+/**
+ *При первом вводе знака, необходимо дождатся следуйщего числа и сохранить введеный знак для определения последующей операции.
+ */
+/*
+if ($lastSign == null && (isset($_POST['plus']) || isset($_POST['minus'])
+        || isset($_POST['division']) || isset($_POST['multiply']))) {
+    $equal = false;
     if (isset($_POST['plus']) && !$count) {
+
         echo 'Первый плюс ' . $lastSign . '</br>';
         echo 'Первый плюс ' . $firstNumber . '</br>';
         echo 'Первый плюс ' . $secondNumber . '</br>';
@@ -455,188 +824,60 @@ if ($entryField == null && $result == null) {
         $count = true;
         $lastSign = '*';
     }
+}
 
+/**
+ *Произведение операций при нажатии знака равно в зависимости от последнего нажатого знака.
+ */
+/*
+if (isset($_POST['equally']) && $secondNumber) {
+    if ($lastSign == '+') {
+        echo 'Равно плюс ' . $lastSign . '</br>';
+        echo 'Равно плюс ' . $firstNumber . '</br>';
+        echo 'Равно плюс ' . $secondNumber . '</br>';
+        echo 'Равно плюс ' . $showResult . '</br>';
+        $showResult = plus($firstNumber, $secondNumber);
+        file_put_contents($file,$secondNumber.$lastSign.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+        $secondNumber = $showResult;
+        $firstNumber = null;
 
-if ($lastSign != null && (isset($_POST['plus']) || isset($_POST['minus']) || isset($_POST['division']) || isset($_POST['multiply']))) {
-    $equal = false;
-    if ($count && $lastSign == '+') {
-        echo 'второй плюс ' . $lastSign . '</br>';
-        echo 'второй плюс ' . $firstNumber . '</br>';
-        echo 'второй плюс ' . $secondNumber . '</br>';
-        echo 'второй плюс ' . $showResult . '</br>';
-        if (!(isset($_POST['plus']))) {
-            if (isset($_POST['minus'])) {
-                echo 'второй плюс на минус' . $lastSign . '</br>';
-                echo 'второй плюс на минус ' . $firstNumber . '</br>';
-                echo 'второй плюс на минус ' . $secondNumber . '</br>';
-                echo 'второй плюс на минус ' . $showResult . '</br>';
-                $lastSign = '-';
-                $showResult = $showResult = plus($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            } elseif (isset($_POST['division'])) {
-                echo 'второй плюс на деление ' . $lastSign . '</br>';
-                echo 'второй плюс на деление ' . $firstNumber . '</br>';
-                echo 'второй плюс на деление ' . $secondNumber . '</br>';
-                echo 'второй плюс на деление ' . $showResult . '</br>';
-                $lastSign = '/';
-
-                $showResult = plus($secondNumber, $firstNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-
-            } elseif (isset($_POST['multiply'])) {
-                echo 'второй плюс на умножить' . $lastSign . '</br>';
-                echo 'второй плюс на умножить ' . $firstNumber . '</br>';
-                echo 'второй плюс на умножить ' . $secondNumber . '</br>';
-                echo 'второй плюс на умножить ' . $showResult . '</br>';
-                $lastSign = '*';
-                $showResult = plus($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            }
+    } elseif ($lastSign == '-') {
+        echo 'Равно минус ' . $lastSign . '</br>';
+        echo 'Равно минус ' . $firstNumber . '</br>';
+        echo 'Равно минус ' . $secondNumber . '</br>';
+        echo 'Равно минус ' . $showResult . '</br>';
+        $showResult = minus($secondNumber, $firstNumber);
+        file_put_contents($file,$secondNumber.$lastSign.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+        $secondNumber = $showResult;
+        $firstNumber = null;
+    } elseif ($lastSign == '/') {
+        echo 'Равно деление ' . $lastSign . '</br>';
+        echo 'Равно деление ' . $firstNumber . '</br>';
+        echo 'Равно деление ' . $secondNumber . '</br>';
+        echo 'Равно деление ' . $showResult . '</br>';
+        if ($firstNumber == 0) {
+            $showResult = 'Деление на ноль невозможно';
+            file_put_contents($file,$secondNumber.$lastSign.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
+            $firstNumber = null;
+            $secondNumber = null;
+            $lastSign = null;
+            $count = false;
         } else {
-            $showResult = plus($firstNumber, $secondNumber);
+            $showResult = division($secondNumber, $firstNumber);
+            file_put_contents($file,$secondNumber.$lastSign.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
             $secondNumber = $showResult;
             $firstNumber = null;
         }
-
-    } elseif ($count && $lastSign == '-') {
-        echo 'второй минус ' . $lastSign . '</br>';
-        echo 'второй минус ' . $firstNumber . '</br>';
-        echo 'второй минус ' . $secondNumber . '</br>';
-        echo 'второй минус ' . $showResult . '</br>';
-        if (!(isset($_POST['minus']))) {
-            if (isset($_POST['plus'])) {
-                echo 'второй минус на плюс ' . $lastSign . '</br>';
-                echo 'второй минус на плюс ' . $firstNumber . '</br>';
-                echo 'второй минус на плюс ' . $secondNumber . '</br>';
-                echo 'второй минус на плюс ' . $showResult . '</br>';
-                $lastSign = '+';
-                $showResult = minus($secondNumber, $firstNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            } elseif (isset($_POST['division'])) {
-                echo 'второй минус на деление ' . $lastSign . '</br>';
-                echo 'второй минус на деление ' . $firstNumber . '</br>';
-                echo 'второй минус на деление ' . $secondNumber . '</br>';
-                echo 'второй минус на деление ' . $showResult . '</br>';
-                $lastSign = '/';
-
-                $showResult = minus($secondNumber, $firstNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-
-            } elseif (isset($_POST['multiply'])) {
-                echo 'второй минус на умножить' . $lastSign . '</br>';
-                echo 'второй минус на умножить ' . $firstNumber . '</br>';
-                echo 'второй минус на умножить ' . $secondNumber . '</br>';
-                echo 'второй минус на умножить ' . $showResult . '</br>';
-                $lastSign = '*';
-                $showResult = minus($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            }
-        } else {
-            $showResult = minus($secondNumber, $firstNumber);
-            $secondNumber = $showResult;
-            $firstNumber = null;
-        }
-    } elseif ($count && $lastSign == '/') {
-        echo 'второе деление ' . $lastSign . '</br>';
-        echo 'второе деление ' . $firstNumber . '</br>';
-        echo 'второе деление ' . $secondNumber . '</br>';
-        echo 'второе деление ' . $showResult . '</br>';
-        if (!isset($_POST['division'])) {
-            if (isset($_POST['plus'])) {
-                echo 'второй деление на плюс ' . $lastSign . '</br>';
-                echo 'второй деление на плюс ' . $firstNumber . '</br>';
-                echo 'второй деление на плюс ' . $secondNumber . '</br>';
-                echo 'второй деление на плюс ' . $showResult . '</br>';
-                $lastSign = '+';
-                if ($firstNumber != null) {
-                    $showResult = division($secondNumber, $firstNumber);
-                    $secondNumber = $showResult;
-                    $firstNumber = null;
-                }
-            } elseif (isset($_POST['minus'])) {
-                echo 'второй деление на минус' . $lastSign . '</br>';
-                echo 'второй деление на минус ' . $firstNumber . '</br>';
-                echo 'второй деление на минус ' . $secondNumber . '</br>';
-                echo 'второй деление на минус ' . $showResult . '</br>';
-                $lastSign = '-';
-                if ($firstNumber != null) {
-                    $showResult = division($secondNumber, $firstNumber);
-                    $secondNumber = $showResult;
-                    $firstNumber = null;
-                }
-            } elseif (isset($_POST['multiply'])) {
-                echo 'второй деление на умножить' . $lastSign . '</br>';
-                echo 'второй деление на умножить ' . $firstNumber . '</br>';
-                echo 'второй деление на умножить ' . $secondNumber . '</br>';
-                echo 'второй деление на умножить ' . $showResult . '</br>';
-
-                $lastSign = '*';
-                if ($firstNumber != null) {
-                    $showResult = division($secondNumber, $firstNumber);
-                    $secondNumber = $showResult;
-                    $firstNumber = null;
-                }
-            }
-        } else {
-            if ($firstNumber === 0) {
-                $showResult = 'Деление на ноль невозможно';
-                $firstNumber = null;
-                $secondNumber = null;
-                $lastSign = null;
-                $count = false;
-            } elseif ($firstNumber != null) {
-                $showResult = division($secondNumber, $firstNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            }
-        }
-    } elseif ($count && $lastSign == '*') {
-        echo 'второe умножение ' . $lastSign . '</br>';
-        echo 'второe умножение ' . $firstNumber . '</br>';
-        echo 'второe умножение ' . $secondNumber . '</br>';
-        echo 'второe умножение ' . $showResult . '</br>';
-        if (!(isset($_POST['multiply']))) {
-            if (isset($_POST['plus'])) {
-                echo 'второй умножение на плюс ' . $lastSign . '</br>';
-                echo 'второй умножение на плюс ' . $firstNumber . '</br>';
-                echo 'второй умножение на плюс ' . $secondNumber . '</br>';
-                echo 'второй умножение на плюс ' . $showResult . '</br>';
-                $lastSign = '+';
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            } elseif (isset($_POST['minus'])) {
-                echo 'второй умножение на минус' . $lastSign . '</br>';
-                echo 'второй умножение на минус ' . $firstNumber . '</br>';
-                echo 'второй умножение на минус ' . $secondNumber . '</br>';
-                echo 'второй умножение на минус ' . $showResult . '</br>';
-                $lastSign = '-';
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-            } elseif (isset($_POST['division'])) {
-                echo 'второй умножение на деление ' . $lastSign . '</br>';
-                echo 'второй умножение на деление ' . $firstNumber . '</br>';
-                echo 'второй умножение на деление ' . $secondNumber . '</br>';
-                echo 'второй умножение на деление ' . $showResult . '</br>';
-                $lastSign = '/';
-
-                $showResult = multiply($firstNumber, $secondNumber);
-                $secondNumber = $showResult;
-                $firstNumber = null;
-
-            }
-        }
-    } else {
-        $showResult = multiply($firstNumber, $secondNumber);
+    } elseif ($lastSign == '*') {
+        echo 'Равно умножить ' . $lastSign . '</br>';
+        echo 'Равно умножить  ' . $firstNumber . '</br>';
+        echo 'Равно умножить  ' . $secondNumber . '</br>';
+        echo 'Равно умножить  ' . $showResult . '</br>';
+        $showResult = multiply($secondNumber, $firstNumber);
+        file_put_contents($file,$secondNumber.$lastSign.($firstNumber ? $firstNumber : 0).'='.$showResult.PHP_EOL,FILE_APPEND);
         $secondNumber = $showResult;
         $firstNumber = null;
     }
+    $equal = true;
 }
  */
