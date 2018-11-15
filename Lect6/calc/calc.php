@@ -17,12 +17,13 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
     $pass = $_SESSION['pass'];
     if (auth($login,$pass)){
         $file = 'math.txt';
-        $firstNumber = isset($_POST['firstNumber']) ? $_POST['firstNumber'] : null;
+        $firstNumber = isset($_POST['firstNumber']) ? htmlspecialchars($_POST['firstNumber']) : null;
         $secondNumber = isset($_POST['secondNumber']) ? $_POST['secondNumber'] : null;
         $showResult = isset($showResult) ? ($showResult == null ? $firstNumber : 0) : ($firstNumber == null ? 0 : $firstNumber) ; // Выводит результат в поле ввода
         $count = isset($_POST['count']) ? $_POST['count'] : false;// Был ли нажат второй знак
         $lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null; // Последний знак который был нажат
         $equal = isset($_POST['lastEqual']) ? $_POST['lastEqual'] : false;// Была ли нажата кнопка равно
+        $epsilon = 0.0000001;
 
         /**
          * Функция очистки всех переменных.
@@ -40,6 +41,7 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
         /**
          * Если мы хотим после вывода результата написать новое выражение то не обходимо что бы $equal было true
          */
+
         if ($equal && (isset($_POST['seven']) || isset($_POST['eight']) || isset($_POST['nine']) ||
                 isset($_POST['six']) || isset($_POST['five']) || isset($_POST['four']) ||
                 isset($_POST['three']) || isset($_POST['two']) || isset($_POST['one']))) {
@@ -153,7 +155,7 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
                         $lastSign = '*';
                     }
                 }
-                if ($firstNumber == 0) {
+                if (abs($firstNumber) <= $epsilon) {
                     $showResult = 'Деление на ноль невозможно';
                     file_put_contents($file, $secondNumber . '/' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                     $firstNumber = null;
@@ -224,7 +226,7 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
                     $showResult = minus($secondNumber, $firstNumber);
                     break;
                 case '/':
-                    if ($firstNumber == 0) {
+                    if (abs($firstNumber) <= $epsilon) {
                         $showResult = 'Деление на ноль невозможно';
                     } else {
                         $showResult = division($secondNumber, $firstNumber);
@@ -235,14 +237,14 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
                     break;
             }
             file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
-            if ($lastSign == '/' && $firstNumber == 0) {
+            if ($lastSign == '/' && abs($firstNumber) <= $epsilon) {
                 $secondNumber = null;
                 $lastSign = null;
                 $count = false;
             } else {
                 $secondNumber = $showResult;
             }
-            if ($firstNumber == 0) {
+            if (abs($firstNumber) <= $epsilon) {
                 $equal = $secondNumber;
             } else {
                 $equal = $firstNumber;
@@ -308,7 +310,7 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
             <input type="hidden" name="secondNumber" value="<?= $secondNumber; ?>">
             <input type="hidden" name="count" value="<?= $count; ?>">
             <input type="text" name="entryField" value="<?= $firstNumber; ?>" placeholder="<?= $showResult; ?>"
-                   style="width: 100%;height: 30px" pattern="\d(\.\d{2})?">
+                   style="width: 100%;height: 30px"  >
             <br>
             <input type="submit" name="clear" value="C" style="width: 100%">
             <br>
@@ -334,7 +336,6 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
             <input type="submit" name="changeSign" value="-/+" style="width: 100%">
         </form>
     </div>
-
     <form action="calc.php" method="get">
         <input type="submit" name="logout" value="Logout" onclick="location.href='index.php'">
     </form>
