@@ -12,14 +12,14 @@ session_start();
 
 require_once __DIR__ . '/function.php';
 
-if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
+if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
     $login = $_SESSION['login'];
     $pass = $_SESSION['pass'];
-    if (auth($login,$pass)){
+    if (auth($login, $pass)) {
         $file = 'math.txt';
         $firstNumber = isset($_POST['firstNumber']) ? htmlspecialchars($_POST['firstNumber']) : null;
         $secondNumber = isset($_POST['secondNumber']) ? $_POST['secondNumber'] : null;
-        $showResult = isset($showResult) ? ($showResult == null ? $firstNumber : 0) : ($firstNumber == null ? 0 : $firstNumber) ; // Выводит результат в поле ввода
+        $showResult = isset($showResult) ? ($showResult == null ? $firstNumber : 0) : ($firstNumber == null ? 0 : $firstNumber); // Выводит результат в поле ввода
         $count = isset($_POST['count']) ? $_POST['count'] : false;// Был ли нажат второй знак
         $lastSign = isset($_POST['lastSign']) ? $_POST['lastSign'] : null; // Последний знак который был нажат
         $equal = isset($_POST['lastEqual']) ? $_POST['lastEqual'] : false;// Была ли нажата кнопка равно
@@ -260,12 +260,12 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
             header('Location:auth.php');
             exit();
         }
-    }else{
+    } else {
         session_destroy();
         header('Location:auth.php');
         exit();
     }
-}else{
+} else {
     session_destroy();
     header('Location:auth.php');
     exit();
@@ -310,7 +310,7 @@ if  (isset($_SESSION['login']) && isset($_SESSION['pass'])){
             <input type="hidden" name="secondNumber" value="<?= $secondNumber; ?>">
             <input type="hidden" name="count" value="<?= $count; ?>">
             <input type="text" name="entryField" value="<?= $firstNumber; ?>" placeholder="<?= $showResult; ?>"
-                   style="width: 100%;height: 30px"  >
+                   style="width: 100%;height: 30px">
             <br>
             <input type="submit" name="clear" value="C" style="width: 100%">
             <br>
