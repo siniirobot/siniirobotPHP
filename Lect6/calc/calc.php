@@ -125,7 +125,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                         $lastSign = '*';
                     }
                 }
-                $showResult = plus($firstNumber, $secondNumber);
+                $showResult = addition($firstNumber, $secondNumber);
                 file_put_contents($file, $secondNumber . '+' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
@@ -140,7 +140,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                         $lastSign = '*';
                     }
                 }
-                $showResult = minus($secondNumber, $firstNumber);
+                $showResult = subtraction($secondNumber, $firstNumber);
                 file_put_contents($file, $secondNumber . '-' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                 $secondNumber = $showResult;
                 $firstNumber = null;
@@ -180,7 +180,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                     }
                 }
                 if ($firstNumber != null) {
-                    $showResult = multiply($firstNumber, $secondNumber);
+                    $showResult = multiplication($firstNumber, $secondNumber);
                     file_put_contents($file, $secondNumber . '*' . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);
                     $secondNumber = $showResult;
                     $firstNumber = null;
@@ -220,10 +220,10 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
             }
             switch ($lastSign) {
                 case '+':
-                    $showResult = plus($firstNumber, $secondNumber);
+                    $showResult = addition($firstNumber, $secondNumber);
                     break;
                 case '-':
-                    $showResult = minus($secondNumber, $firstNumber);
+                    $showResult = subtraction($secondNumber, $firstNumber);
                     break;
                 case '/':
                     if (abs($firstNumber) <= $epsilon) {
@@ -233,7 +233,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                     }
                     break;
                 case '*':
-                    $showResult = multiply($secondNumber, $firstNumber);
+                    $showResult = multiplication($secondNumber, $firstNumber);
                     break;
             }
             file_put_contents($file, $secondNumber . $lastSign . ($firstNumber ? $firstNumber : 0) . '=' . $showResult . PHP_EOL, FILE_APPEND);

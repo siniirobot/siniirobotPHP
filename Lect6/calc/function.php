@@ -13,15 +13,15 @@ function auth($login, $pass) {
     return false;
 }
 
-function plus($firstNumber,$secondNumber) {
+function addition($firstNumber, $secondNumber) {
     return $firstNumber + $secondNumber;
 }
 
-function minus($firstNumber,$secondNumber) {
+function subtraction($firstNumber, $secondNumber) {
     return $firstNumber - $secondNumber;
 }
 
-function multiply($firstNumber,$secondNumber) {
+function multiplication($firstNumber, $secondNumber) {
     return $firstNumber * $secondNumber;
 }
 
