@@ -33,6 +33,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         exit();
     }
 }
+var_dump($_SESSION['session']);
 ?>
 
 

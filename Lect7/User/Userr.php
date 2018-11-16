@@ -9,7 +9,7 @@
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 
-class User
+class Userr
 {
     public $name;
     public $age;
@@ -64,7 +64,7 @@ class User
     }
 }
 
-$pavel = new User('Pavel', 20,'Русский');
+$pavel = new Userr('Pavel', 20,'Русский');
 
 echo $pavel->hello('Petya').'</br>';
 
