@@ -23,9 +23,8 @@ class session
 
     public function destroy() {
         session_destroy();
-        header('Location: Lect7/oopCalc/auth.php');
+        header('Location: /Lect7/oopCalc/Auth.php');
         exit();
     }
-
 
 }

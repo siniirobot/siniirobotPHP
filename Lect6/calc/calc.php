@@ -257,17 +257,17 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
          */
         if (isset($_GET['logout']) > 0) {
             session_destroy();
-            header('Location:auth.php');
+            header('Location:Auth.php');
             exit();
         }
     } else {
         session_destroy();
-        header('Location:auth.php');
+        header('Location:Auth.php');
         exit();
     }
 } else {
     session_destroy();
-    header('Location:auth.php');
+    header('Location:Auth.php');
     exit();
 }
 ?>

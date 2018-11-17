@@ -61,11 +61,11 @@ class user
     public function login($login, $pass)
     {
         if ($this->check($login, $pass)) {
-            require_once __DIR__ . '/session.php';
+            require_once __DIR__ . '/Session.php';
             session_start();
             $session = new session();
             $session->set($login, $pass);
-            header('Location: Lect7/oopCalc/calculator.php');
+            header('Location: /Lect7/oopCalc/Calculator.php');
             exit();
         } else {
             echo 'Введите верные даные';
@@ -74,7 +74,7 @@ class user
 
     public function logout()
     {
-        require_once __DIR__ . '/session.php';
+        require_once __DIR__ . '/Session.php';
         $session = new session();
         $session->destroy();
     }

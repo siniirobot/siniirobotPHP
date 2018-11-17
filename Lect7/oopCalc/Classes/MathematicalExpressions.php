@@ -6,57 +6,14 @@
  * Time: 15:28
  */
 
-class calc
+class MathematicalExpressions
 {
-    protected $firstNumber;
-    protected $secondNumber;
-    private $file;
-
-    public function __construct($firstNumber, $secondNumber)
-    {
-        $this->firstNumber = $firstNumber;
-        $this->secondNumber = $secondNumber;
-        $this->file = 'Lect7/oopCalc/math.txt';
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFirstNumber()
-    {
-        return $this->firstNumber;
-    }
-
-    /**
-     * @param mixed $firstNumber
-     */
-    public function setFirstNumber($firstNumber)
-    {
-        $this->firstNumber = $firstNumber;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSecondNumber()
-    {
-        return $this->secondNumber;
-    }
-
-    /**
-     * @param mixed $secondNumber
-     */
-    public function setSecondNumber($secondNumber)
-    {
-        $this->secondNumber = $secondNumber;
-    }
-
-
+    private $file = './math.txt';
 
     public function addition($firstNumber, $secondNumber)
     {
         $sum = $firstNumber + $secondNumber;
-        file_put_contents($this->file, $secondNumber . '+' . $firstNumber . '=' . $sum . PHP_EOL, FILE_APPEND);
+        file_put_contents($this->file, $firstNumber . '+' . $secondNumber . '=' . $sum . PHP_EOL, FILE_APPEND);
         return $sum;
     }
 

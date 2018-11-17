@@ -8,14 +8,14 @@
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 session_start();
-require_once ' Lect7/oopCalc/Classes/user.php';
+require_once __DIR__ . ' /Classes/User.php';
 $user = new user('admin', '11');
 
 if (isset($_SESSION['session'])) {
     $login = $_SESSION['session']['login'];
     $pass = $_SESSION['session']['pass'];
     if ($user->check($login, $pass)) {
-        header('Location: Lect7/oopCalc/calculator.php');
+        header('Location: /Lect7/oopCalc/Calculator.php');
         exit();
     }
 }
@@ -33,7 +33,7 @@ if (count($_POST) > 0) {
     </title>
 </head>
 <body>
-<form action="auth.php" method="post">
+<form action="Auth.php" method="post">
     <p><input type="text" name="login" placeholder="Введите логин"></p>
     <p><input type="password" name="pass" placeholder="Введите пароль"></p>
     <p><input type="submit" value="Login"></p>
