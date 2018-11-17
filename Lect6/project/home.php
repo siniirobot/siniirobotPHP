@@ -13,7 +13,7 @@ session_start();
 
 if (count($_GET) > 0){
     session_destroy();
-    header('Location:index.php');
+    header('Location:index2.php');
     exit();
 }
 ?>
@@ -25,7 +25,7 @@ if (count($_GET) > 0){
 <body>
     <p>Поздравляю путник ты достиг точки назначения</p>
     <form action="home.php" method="get">
-        <input type="submit" name="logout" value="Logout" onclick="location.href='index.php'">
+        <input type="submit" name="logout" value="Logout" onclick="location.href='index2.php'">
     </form>
 </body>
 </html>

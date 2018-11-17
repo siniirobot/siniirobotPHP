@@ -67,7 +67,7 @@ for ($i = 0; $i < $rows; $i++)
             }
         }
         echo '</pre>';
-        echo '<a href="index.php">Start again</a>';
+        echo '<a href="index2.php">Start again</a>';
         break;
 } ?>
 </body>
