@@ -6,7 +6,7 @@
  * Time: 6:23
  */
 
-require_once  __DIR__ . '/authoload.php';
+require_once __DIR__ . '/authoload.php';
 
 use Classes\Bicycle;
 use Classes\Car;

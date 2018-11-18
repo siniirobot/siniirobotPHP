@@ -6,7 +6,9 @@
  * Time: 8:20
  */
 
-class Worker
+//namespace Classes;
+
+class Workers
 {
     protected $name;
     protected $salaryPerDay;
@@ -25,20 +27,23 @@ class Worker
 
     public function getWorkDay()
     {
-        if ($this->setWorkDay($this->workDay) === null) {
-            return $this->workDay;
-        }else{
+        if ($this->workDay == null) {
             throw new \Exception('Вы не указали колличество отработаных дней.');
-
+        }else{
+            return $this->workDay;
         }
+
     }
 
-    public function getCalculateSalary(){
+    public function getCalculateSalary()
+    {
         try{
             return $this->salaryPerDay * $this->getWorkDay();
         }catch (\Exception $e){
             echo $e->getMessage();
-            die();
+            return false;
         }
     }
+
+
 }
