@@ -21,9 +21,9 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
 
     if ($user->check($session->get('login'), $session->get('pass'))) {
 
-        $firstNumber = isset($_GET['firstNumber']) ? intval($_GET['firstNumber']) : 'Введите первую цифру.';
+        $firstNumber = isset($_GET['firstNumber']) ? intval($_GET['firstNumber']) : '';
         $sign = isset($_GET['sign']) ? htmlspecialchars($_GET['sign']) : 'Введите знак + - * /';
-        $secondNumber = isset($_GET['secondNumber']) ? intval($_GET['secondNumber']) : 'Введите вторуюю цифру.';
+        $secondNumber = isset($_GET['secondNumber']) ? intval($_GET['secondNumber']) : '';
 
         if ($sign === '+') {
             $result = $math->addition($firstNumber, $secondNumber);
@@ -41,7 +41,6 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
             $user->logout();
         }
     } else {
-        echo 'Введите верные даные';
         $session->destroy();
     }
 

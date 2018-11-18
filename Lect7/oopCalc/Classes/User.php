@@ -21,16 +21,11 @@ class User
 
     public function login($login, $pass)
     {
+        require_once __DIR__ . '/Session.php';
         $session = new session();
-        if ($this->check($login, $pass)) {
-            require_once __DIR__ . '/Session.php';
-            $session->set($login, $pass);
-            header('Location: /Lect7/oopCalc/Calculator.php');
-            exit();
-        } else {
-            echo 'Введите верные даные';
-            $session->destroy();
-        }
+        $session->set($login, $pass);
+        header('Location: /Lect7/oopCalc/Calculator.php');
+        exit();
     }
 
     public function logout()

@@ -20,13 +20,20 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         header('Location: /Lect7/oopCalc/Calculator.php');
         exit();
     } else {
-        echo 'Введите верные даные';
         $session->destroy();
     }
 }
 
+$login = isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '';
+$pass = isset($_POST['pass']) ? htmlspecialchars($_POST['pass']) : '';
+
 if (count($_POST) > 0) {
-    $user->login($_POST['login'], $_POST['pass']);
+    if ($user->check($login,$pass)){
+        $user->login($login, $pass);
+    }else{
+        echo 'Ваш пароль или логин не верны';
+    }
+
 }
 ?>
 

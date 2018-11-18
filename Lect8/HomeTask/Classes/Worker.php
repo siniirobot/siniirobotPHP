@@ -25,7 +25,7 @@ class Worker
 
     public function getWorkDay()
     {
-        if ($this->workDay === null) {
+        if ($this->setWorkDay($this->workDay) === null) {
             return $this->workDay;
         }else{
             throw new \Exception('Вы не указали колличество отработаных дней.');
