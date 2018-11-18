@@ -18,6 +18,7 @@ class Teacher extends Workers
         20 => 30,
         30 => 50,
     );
+
     const CONVERSION = 10;
     const DAYS_RATE = 25;
 
@@ -33,7 +34,7 @@ class Teacher extends Workers
         {
             return true;
         } else {
-            throw new \Exception('Премия будет в другой год');
+            throw new \Exception(' Премия будет в другой год. ');
         }
     }
 
@@ -44,7 +45,7 @@ class Teacher extends Workers
                 return (parent::getCalculateSalary() * self::PREMIUM[$this->experience]) / 100;
             }
         } catch (\Exception $e) {
-            echo $e->getMessage().'в классе Teacher функции getPremium'.'</br>';
+            echo $e->getMessage();
             return 0;
         }
     }
@@ -59,7 +60,7 @@ class Teacher extends Workers
                 return $workDay - self::DAYS_RATE;
             }
         }catch (\Exception $e){
-            echo $e->getMessage().' в классе Teacher функции getConversion'.'</br>';
+            echo $e->getMessage();
             return 0;
         }
 
@@ -70,7 +71,7 @@ class Teacher extends Workers
         try{
             return parent::getCalculateSalary() + $this->getPremium() + ($this->getConversion() * $this->salaryPerDay);
         }catch (\Exception $e){
-            echo $e->getMessage().' в классе Teacher функции getCalculateSalary'.'</br>';
+            echo $e->getMessage();
         }
 
     }

@@ -6,7 +6,6 @@
  * Time: 11:44
  */
 
-spl_autoload_register(function ($className) {
-    var_dump(__DIR__ . 'autoloadWorkers.php/' . $className . 'php');
-    require_once __DIR__ . 'autoloadWorkers.php/' . $className . 'php';
+spl_autoload_register(function($className){
+    require_once __DIR__ . '/' .$className . '.php';
 });

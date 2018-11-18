@@ -6,6 +6,6 @@
  * Time: 7:22
  */
 
-spl_autoload_register(function ($className) {
-    require_once __DIR__ . 'authoload.php/' . $className . 'php';
+spl_autoload_register(function($className){
+    require_once __DIR__ . '/' .$className . '.php';
 });

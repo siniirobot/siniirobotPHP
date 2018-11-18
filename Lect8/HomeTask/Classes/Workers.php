@@ -41,7 +41,7 @@ class Workers
         try{
             return $this->salaryPerDay * $this->getWorkDay();
         }catch (\Exception $e){
-            echo $e->getMessage().' в классе Workers функции getCalculateSalary'.'</br>';
+            echo $e->getMessage();
             return false;
         }
     }

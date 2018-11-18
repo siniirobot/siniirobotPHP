@@ -10,5 +10,8 @@ namespace Classes;
 
 class Builder extends Workers
 {
-
+    public function __construct(string $name, float $salaryPerDay)
+    {
+        parent::__construct($name, $salaryPerDay);
+    }
 }
