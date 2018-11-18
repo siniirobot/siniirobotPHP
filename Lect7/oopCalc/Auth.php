@@ -5,21 +5,25 @@
  * Date: 09.11.2018
  * Time: 10:40
  */
+
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 session_start();
 require_once __DIR__ . ' /Classes/User.php';
-$user = new user('admin', '11');
+require_once __DIR__ . ' /Classes/Session.php';
 
-if (isset($_SESSION['session'])) {
-    $login = $_SESSION['session']['login'];
-    $pass = $_SESSION['session']['pass'];
-    if ($user->check($login, $pass)) {
+$user = new User();
+
+if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
+    $session = new Session();
+    if ($user->check($session->get('login'), $session->get('pass'))) {
         header('Location: /Lect7/oopCalc/Calculator.php');
         exit();
+    } else {
+        echo 'Введите верные даные';
+        $session->destroy();
     }
 }
-session_destroy();
 
 if (count($_POST) > 0) {
     $user->login($_POST['login'], $_POST['pass']);

@@ -10,33 +10,39 @@ header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL);
 session_start();
 
-if (isset($_SESSION['session'])) {
+if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
     require_once __DIR__ . '/Classes/User.php';
     require_once __DIR__ . '/Classes/MathematicalExpressions.php';
+    require_once __DIR__ . '/Classes/Session.php';
 
-    $login = $_SESSION['session']['login'];
-    $pass = $_SESSION['session']['pass'];
-    $user = new user($login, $pass);
+    $user = new User();
     $math = new MathematicalExpressions();
+    $session = new Session();
 
-    $firstNumber = isset($_GET['firstNumber']) ? intval($_GET['firstNumber']) : '';
-    $sign = isset($_GET['sign']) ? $_GET['sign'] : 'введите знак + - * /';
-    $secondNumber = isset($_GET['secondNumber']) ? intval($_GET['secondNumber']) : '';
+    if ($user->check($session->get('login'), $session->get('pass'))) {
 
-    if ($sign == '+') {
-        $result = $math->addition($firstNumber, $secondNumber);
-    } elseif ($sign == '-') {
-        $result = $math->subtraction($firstNumber, $secondNumber);
-    } elseif ($sign == '*') {
-        $result = $math->multiplication($firstNumber, $secondNumber);
-    } elseif ($sign == '/') {
-        $result = $math->division($firstNumber, $secondNumber);
+        $firstNumber = isset($_GET['firstNumber']) ? intval($_GET['firstNumber']) : 'Введите первую цифру.';
+        $sign = isset($_GET['sign']) ? htmlspecialchars($_GET['sign']) : 'Введите знак + - * /';
+        $secondNumber = isset($_GET['secondNumber']) ? intval($_GET['secondNumber']) : 'Введите вторуюю цифру.';
+
+        if ($sign === '+') {
+            $result = $math->addition($firstNumber, $secondNumber);
+        } elseif ($sign === '-') {
+            $result = $math->subtraction($firstNumber, $secondNumber);
+        } elseif ($sign === '*') {
+            $result = $math->multiplication($firstNumber, $secondNumber);
+        } elseif ($sign === '/') {
+            $result = $math->division($firstNumber, $secondNumber);
+        } else {
+            $result = 'Нужно ввести знаки +, -, * или /';
+        }
+
+        if (isset($_GET['logout'])) {
+            $user->logout();
+        }
     } else {
-        $result = 'Нужно ввести знаки +, -, * или /';
-    }
-
-    if (isset($_GET['logout']) > 0) {
-        $user->logout();
+        echo 'Введите верные даные';
+        $session->destroy();
     }
 
 } else {

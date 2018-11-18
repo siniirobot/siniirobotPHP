@@ -10,15 +10,14 @@ class session
 {
 
     public function set($login,$pass){
-        $_SESSION['session'] = array(
+        $_SESSION = array(
             'login' => $login,
             'pass' => $pass,
             );
     }
 
-    public function get($login){
-        session_start();
-        return $_SESSION['session'][$login];
+    public function get($key){
+        return $_SESSION[$key];
     }
 
     public function destroy() {

@@ -6,52 +6,13 @@
  * Time: 9:50
  */
 
-class user
+class User
 {
-    private $login;
-    private $pass;
-
-    public function __construct($login, $pass)
-    {
-        $this->login = $login;
-        $this->pass = $pass;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param mixed $login
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPass()
-    {
-        return $this->pass;
-    }
-
-    /**
-     * @param mixed $pass
-     */
-    public function setPass($pass)
-    {
-        $this->pass = $pass;
-    }
-
     public function check($login, $pass)
     {
-        if ($login == $this->login && $pass == $this->pass) {
+        $loginTrue = 'admin';
+        $passTrue = '11';
+        if ($login == $loginTrue && $pass == $passTrue) {
             return true;
         } else {
             return false;
@@ -60,15 +21,15 @@ class user
 
     public function login($login, $pass)
     {
+        $session = new session();
         if ($this->check($login, $pass)) {
             require_once __DIR__ . '/Session.php';
-            session_start();
-            $session = new session();
             $session->set($login, $pass);
             header('Location: /Lect7/oopCalc/Calculator.php');
             exit();
         } else {
             echo 'Введите верные даные';
+            $session->destroy();
         }
     }
 
