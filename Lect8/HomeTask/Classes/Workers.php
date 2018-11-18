@@ -6,7 +6,7 @@
  * Time: 8:20
  */
 
-//namespace Classes;
+namespace Classes;
 
 class Workers
 {
@@ -25,22 +25,23 @@ class Workers
         $this->workDay = $workDay;
     }
 
-    public function getWorkDay()
+    public function getWorkDay() : int
     {
+
         if ($this->workDay == null) {
-            throw new \Exception('Вы не указали колличество отработаных дней.');
+            throw new \Exception('Вы не указали колличество отработаных дней.'.'</br>');
         }else{
             return $this->workDay;
         }
 
     }
 
-    public function getCalculateSalary()
+    public function getCalculateSalary() : float
     {
         try{
             return $this->salaryPerDay * $this->getWorkDay();
         }catch (\Exception $e){
-            echo $e->getMessage();
+            echo $e->getMessage().' в классе Workers функции getCalculateSalary'.'</br>';
             return false;
         }
     }

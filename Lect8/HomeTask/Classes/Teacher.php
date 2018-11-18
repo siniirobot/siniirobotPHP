@@ -6,7 +6,7 @@
  * Time: 12:35
  */
 
-require_once __DIR__ . '/Workers.php';
+namespace Classes;
 
 class Teacher extends Workers
 {
@@ -37,34 +37,42 @@ class Teacher extends Workers
         }
     }
 
-    public function getPremium()
+    public function getPremium() : float
     {
         try {
             if ($this->isItPremiumYear()) {
                 return (parent::getCalculateSalary() * self::PREMIUM[$this->experience]) / 100;
             }
         } catch (\Exception $e) {
-
-            echo $e->getMessage();
-
-        }
-    }
-
-    public function getConversion()
-    {
-        if ($this->getWorkDay() < self::DAYS_RATE) {
+            echo $e->getMessage().'в классе Teacher функции getPremium'.'</br>';
             return 0;
-        }else {
-            return $this->getWorkDay() - self::DAYS_RATE;
         }
     }
 
-    public function getCalculateSalary()
+    public function getConversion() : int
     {
-        var_dump($this->getConversion() * $this->salaryPerDay);
-        var_dump(parent::getCalculateSalary());
-        var_dump($this->getPremium());
-        return parent::getCalculateSalary() + $this->getPremium() + ($this->getConversion() * $this->salaryPerDay);
+        try{
+            $workDay = parent::getWorkDay();
+            if ($workDay < self::DAYS_RATE) {
+                return 0;
+            }else {
+                return $workDay - self::DAYS_RATE;
+            }
+        }catch (\Exception $e){
+            echo $e->getMessage().' в классе Teacher функции getConversion'.'</br>';
+            return 0;
+        }
+
+    }
+
+    public function getCalculateSalary() : float
+    {
+        try{
+            return parent::getCalculateSalary() + $this->getPremium() + ($this->getConversion() * $this->salaryPerDay);
+        }catch (\Exception $e){
+            echo $e->getMessage().' в классе Teacher функции getCalculateSalary'.'</br>';
+        }
+
     }
 
 
