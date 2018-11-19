@@ -39,7 +39,7 @@ class Worker
     {
 
         if ($this->workDays < 1) {
-            throw new \Exception('Вы не указали колличество отработаных дней.'.'</br>');
+            throw new \Exception('Вы не указали колличество отработаных дней.');
         }else{
             return $this->workDays;
         }
