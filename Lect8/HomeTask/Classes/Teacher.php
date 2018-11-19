@@ -28,6 +28,11 @@ class Teacher extends Workers
         $this->experience = $experience;
     }
 
+    /**
+     * Обработка ошибки, премиального года.
+     * @return bool
+     * @throws \Exception
+     */
     public function isItPremiumYear() : bool
     {
         if (array_key_exists($this->experience, self::PREMIUM))
@@ -38,6 +43,10 @@ class Teacher extends Workers
         }
     }
 
+    /**
+     * Возвращает размер премии за выслугу лет.
+     * @return float
+     */
     public function getPremium() : float
     {
         try {
@@ -50,6 +59,10 @@ class Teacher extends Workers
         }
     }
 
+    /**
+     * Возвращает колличесвто дней переработки.
+     * @return int
+     */
     public function getConversion() : int
     {
         try{
@@ -66,6 +79,10 @@ class Teacher extends Workers
 
     }
 
+    /**
+     * Возвращает зарплату учителя с учетом всех премий и переработак.
+     * @return float
+     */
     public function getCalculateSalary() : float
     {
         try{
