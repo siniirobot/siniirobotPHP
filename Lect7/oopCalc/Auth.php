@@ -26,12 +26,13 @@ if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
 
 $login = isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '';
 $pass = isset($_POST['pass']) ? htmlspecialchars($_POST['pass']) : '';
+$error = null;
 
 if (count($_POST) > 0) {
     if ($user->check($login,$pass)){
         $user->login($login, $pass);
     }else{
-        echo 'Ваш пароль или логин не верны';
+        $error = 'Ваш пароль или логин не верны';
     }
 
 }
@@ -44,6 +45,7 @@ if (count($_POST) > 0) {
     </title>
 </head>
 <body>
+<p><?=$error;?></p>
 <form action="Auth.php" method="post">
     <p><input type="text" name="login" placeholder="Введите логин"></p>
     <p><input type="password" name="pass" placeholder="Введите пароль"></p>
