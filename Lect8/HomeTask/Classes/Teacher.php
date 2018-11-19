@@ -8,10 +8,11 @@
 
 namespace Classes;
 
-class Teacher extends Workers
+class Teacher extends Worker
 {
     protected $experience;
     const PREMIUM = array(
+        0 => 0,
         3 => 3,
         5 => 5,
         10 => 15,
@@ -29,52 +30,35 @@ class Teacher extends Workers
     }
 
     /**
-     * Обработка ошибки, премиального года.
-     * @return bool
-     * @throws \Exception
-     */
-    public function isItPremiumYear() : bool
-    {
-        if (array_key_exists($this->experience, self::PREMIUM))
-        {
-            return true;
-        } else {
-            throw new \Exception(' Премия будет в другой год. ');
-        }
-    }
-
-    /**
      * Возвращает размер премии за выслугу лет.
      * @return float
      */
-    public function getPremium() : float
+    public function getPremium()
     {
-        try {
-            if ($this->isItPremiumYear()) {
-                return (parent::getCalculateSalary() * self::PREMIUM[$this->experience]) / 100;
+        $premium = null;
+        foreach (self::PREMIUM as $key => $value){
+            if ($this->experience >= $key) {
+                $premium = $value;
             }
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return 0;
         }
+        return (parent::getCalculateSalary() * $premium) / 100;
     }
 
     /**
      * Возвращает колличесвто дней переработки.
      * @return int
      */
-    public function getConversion() : int
+    public function getConversion()
     {
-        try{
-            $workDay = parent::getWorkDay();
-            if ($workDay < self::DAYS_RATE) {
+        try {
+            $workDays = parent::getWorkDays();
+            if ($workDays < self::DAYS_RATE) {
                 return 0;
-            }else {
-                return $workDay - self::DAYS_RATE;
+            } else {
+                return $workDays - self::DAYS_RATE;
             }
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             echo $e->getMessage();
-            return 0;
         }
 
     }
@@ -83,14 +67,13 @@ class Teacher extends Workers
      * Возвращает зарплату учителя с учетом всех премий и переработак.
      * @return float
      */
-    public function getCalculateSalary() : float
+    public function getCalculateSalary()
     {
-        try{
+        try {
             return parent::getCalculateSalary() + $this->getPremium() + ($this->getConversion() * $this->salaryPerDay);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             echo $e->getMessage();
         }
-
     }
 
 

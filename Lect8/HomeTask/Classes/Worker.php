@@ -8,11 +8,11 @@
 
 namespace Classes;
 
-class Workers
+class Worker
 {
     protected $name;
     protected $salaryPerDay;
-    protected $workDay;
+    protected $workDays;
 
     public function __construct(string $name,float $salaryPerDay)
     {
@@ -22,11 +22,11 @@ class Workers
 
     /**
      * Устанавливает значение колличества отработанных дней.
-     * @param $workDay
+     * @param $workDays
      */
-    public function setWorkDay($workDay)
+    public function setWorkDays($workDays)
     {
-        $this->workDay = $workDay;
+        $this->workDays = $workDays;
     }
 
     /**
@@ -35,13 +35,13 @@ class Workers
      * @return int
      * @throws \Exception
      */
-    public function getWorkDay() : int
+    public function getWorkDays()
     {
 
-        if ($this->workDay < 1) {
+        if ($this->workDays < 1) {
             throw new \Exception('Вы не указали колличество отработаных дней.'.'</br>');
         }else{
-            return $this->workDay;
+            return $this->workDays;
         }
 
     }
@@ -50,15 +50,12 @@ class Workers
      * Возвращает зарплату за отработаные дни
      * @return float
      */
-    public function getCalculateSalary() : float
+    public function getCalculateSalary()
     {
         try{
-            return $this->salaryPerDay * $this->getWorkDay();
+            return $this->salaryPerDay * $this->getWorkDays();
         }catch (\Exception $e){
             echo $e->getMessage();
-            return false;
         }
     }
-
-
 }
