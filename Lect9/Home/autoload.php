@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: user
- * Date: 18.11.2018
- * Time: 11:44
+ * User: sinii
+ * Date: 24.11.2018
+ * Time: 11:32
  */
 
 spl_autoload_register(function($className){
