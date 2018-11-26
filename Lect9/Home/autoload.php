@@ -7,6 +7,5 @@
  */
 
 spl_autoload_register(function($className){
-    var_dump(__DIR__);
     require_once __DIR__ . '/' .$className . '.php';
 });

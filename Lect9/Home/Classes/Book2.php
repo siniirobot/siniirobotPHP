@@ -27,7 +27,7 @@ class Book2 extends Product implements BookInterface2
      */
     public function getContent(): string
     {
-        return file_get_contents(__DIR__ . '../ГарриПоттер.txt');
+        return file_get_contents('./ГарриПоттер.txt');
     }
 
     /**
