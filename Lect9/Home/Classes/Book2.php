@@ -13,12 +13,32 @@ class Book2 extends Product implements BookInterface2
 {
     protected $author;
     protected $pageCount;
+    protected $publisher;
 
-    public function __construct(string $name, int $cost, string $author, int $pageCount)
+    public function __construct(string $name, int $cost, string $author, int $pageCount, string $publisher)
     {
         parent::__construct($name, $cost);
         $this->author = $author;
         $this->pageCount = $pageCount;
+        $this->publisher = $publisher;
+    }
+
+    /**
+     * Вернуть издателя
+     * @return string
+     */
+    public function getPublisher(): string
+    {
+        return $this->publisher;
+    }
+
+    /**
+     * Установить издателя
+     * @param string $publisher
+     */
+    public function setPublisher(string $publisher)
+    {
+        $this->publisher = $publisher;
     }
 
     /**

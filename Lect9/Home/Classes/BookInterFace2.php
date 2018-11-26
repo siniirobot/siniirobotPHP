@@ -29,4 +29,10 @@ interface BookInterface2
      */
     public function getPageCount() : int;
 
+    /**
+     * Вернуть издателя.
+     * @return string
+     */
+    public function getPublisher() : string;
+
 }

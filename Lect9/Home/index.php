@@ -13,22 +13,25 @@ require_once __DIR__ . '/autoload.php';
 
 use Classes\Product;
 use Classes\Book2;
+use Classes\TestCache;
+use Classes\BookCacheDecorator;
 
 $product = new Product('Гарри Поттер',500);
 
 echo $product->getCost().'</br>';
 echo $product->getName().'</br>';
 
-$book = new Book2($product->getName(),$product->getCost(),'Д.Роулинг',500);
+$book = new Book2($product->getName(),$product->getCost(),'Д.Роулинг',500,'Дрофа');
 
 echo $book->getName().'</br>';
 echo $book->getAuthor().'</br>';
 echo $book->getContent().'</br>';
 echo $book->getCost().'</br>';
 echo $book->getPageCount().'</br>';
+echo $book->getPublisher().'</br>';
 
-$cache = new \Classes\TestCache();
+$cache = new TestCache();
 
-$bookCache = new \Classes\BookCacheDecorator($book,$cache);
+$bookCache = new BookCacheDecorator($book,$cache);
 
 echo $bookCache->getBook('Д.Роулинг');
