@@ -11,8 +11,16 @@ namespace Classes;
 
 interface BookInterface2
 {
+
     /**
-     * Судя по всему должно вернуть содержимое книги.
+     * Устанавливает содержимое книги
+     * @param $file
+     * @return mixed
+     */
+    public function setContent(string $file);
+
+    /**
+     * Возвращает содержимое книги.
      * @return string
      */
     public function getContent() : string;

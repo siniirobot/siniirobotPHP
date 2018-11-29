@@ -14,6 +14,7 @@ class Book2 extends Product implements BookInterface2
     protected $author;
     protected $pageCount;
     protected $publisher;
+    protected $file;
 
     public function __construct(string $name, int $cost, string $author, int $pageCount, string $publisher)
     {
@@ -41,13 +42,24 @@ class Book2 extends Product implements BookInterface2
         $this->publisher = $publisher;
     }
 
+
     /**
-     * Судя по всему должно вернуть содержимое книги.
+     * Устанавливает содержимое книги
+     * @param $file
+     * @return mixed|void
+     */
+    public function setContent($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Возвращает содержимое книги.
      * @return string
      */
     public function getContent(): string
     {
-        return file_get_contents('./ГарриПоттер.txt');
+        return file_get_contents($this->file);
     }
 
     /**
@@ -83,7 +95,4 @@ class Book2 extends Product implements BookInterface2
     {
         $this->pageCount = $pageCount;
     }
-
-
-
 }
