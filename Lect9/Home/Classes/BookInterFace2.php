@@ -23,24 +23,25 @@ interface BookInterface2
      * Возвращает содержимое книги.
      * @return string
      */
-    public function getContent() : string;
+    public function getContent(): string;
 
     /**
      * Вернуть автора.
      * @return string
      */
-    public function getAuthor() : string;
+    public function getAuthor(): string;
 
     /**
      * Вернуть колличесвто страниц.
      * @return int
      */
-    public function getPageCount() : int;
+    public function getPageCount(): int;
 
     /**
      * Вернуть издателя.
      * @return string
      */
-    public function getPublisher() : string;
+    public function getPublisher(): string;
 
+    public function getTome(): string;
 }

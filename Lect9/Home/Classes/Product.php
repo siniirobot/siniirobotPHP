@@ -13,7 +13,7 @@ class Product
     public $name;
     public $cost;
 
-    public function __construct(string $name,int $cost)
+    public function __construct(string $name, int $cost)
     {
         $this->name = $name;
         $this->cost = $cost;

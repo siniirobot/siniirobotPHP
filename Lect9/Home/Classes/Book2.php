@@ -15,13 +15,49 @@ class Book2 extends Product implements BookInterface2
     protected $pageCount;
     protected $publisher;
     protected $file;
+    protected $numberTome;
+    protected $tomeCount;
 
-    public function __construct(string $name, int $cost, string $author, int $pageCount, string $publisher)
+    public function __construct(string $name, int $cost, string $author, int $pageCount, string $publisher, int $numberTome, int $tomeCount)
     {
         parent::__construct($name, $cost);
         $this->author = $author;
         $this->pageCount = $pageCount;
         $this->publisher = $publisher;
+        $this->numberTome = $numberTome;
+        $this->tomeCount = $tomeCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNumberTome()
+    {
+        return $this->numberTome;
+    }
+
+    /**
+     * @param mixed $numberTome
+     */
+    public function setNumberTome($numberTome): void
+    {
+        $this->numberTome = $numberTome;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTomeCount()
+    {
+        return $this->tomeCount;
+    }
+
+    /**
+     * @param mixed $tomeCount
+     */
+    public function setTomeCount($tomeCount): void
+    {
+        $this->tomeCount = $tomeCount;
     }
 
     /**
@@ -94,5 +130,10 @@ class Book2 extends Product implements BookInterface2
     public function setPageCount(int $pageCount): void
     {
         $this->pageCount = $pageCount;
+    }
+
+    public function getTome(): string
+    {
+        return 'Это ' . $this->numberTome . ' том из ' . $this->tomeCount;
     }
 }

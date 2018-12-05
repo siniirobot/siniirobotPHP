@@ -15,7 +15,7 @@ interface CacheInterface
      * Получить по ключу.
      * @return string
      */
-    public function getByKey(string $key) : string ;
+    public function getByKey(string $key): string ;
 
     /**
      * Установить по ключу.
