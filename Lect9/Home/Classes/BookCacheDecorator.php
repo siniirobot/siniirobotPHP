@@ -30,7 +30,7 @@ class BookCacheDecorator
         if ($this->cache->checkByKey($id)) {
             return $this->cache->getByKey($id);
         }
-        $this->cache->setByKey($this->book->getAuthor(), $this->book);
+        $this->cache->setByKey($this->book->getAuthor(), $this->book->getContent());
         return $this->cache->getByKey($id);
     }
 }
