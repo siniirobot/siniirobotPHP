@@ -20,19 +20,19 @@ $opt = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
-$minWeight = isset($_GET['minWeight']) ? intval($_GET['minWeight']) > 0 ? intval($_GET['minWeight']) : 0 : null;
-$maxWeight = isset($_GET['maxWeight']) ? intval($_GET['maxWeight']) > 0 ? intval($_GET['maxWeight']) : 0 : null;
+$minWeight = isset($_GET['minWeight']) ? intval($_GET['minWeight']) > 0 ? intval($_GET['minWeight']) : null : null;
+$maxWeight = isset($_GET['maxWeight']) ? intval($_GET['maxWeight']) > 0 ? intval($_GET['maxWeight']) : null : null;
 
 if (count($_GET) > 0) {
     try {
-        if ($minWeight >= 0 && !($maxWeight >= 0)) {
+        if ($minWeight && !$maxWeight) {
             $sql = '
               SELECT name,weight,nameRUS,nameLAT
               FROM animals AS an
               JOIN animalType AS ty
               WHERE an.specie_id = ty.id AND weight > ?';
             $param = [$minWeight];
-        } elseif (!($minWeight >= 0) && $maxWeight >= 0) {
+        } elseif (!$minWeight && $maxWeight) {
             $sql = '
               SELECT name,weight,nameRUS,nameLAT
               FROM animals AS an
@@ -40,7 +40,7 @@ if (count($_GET) > 0) {
               WHERE an.specie_id = ty.id AND weight < ?';
             $param = [$maxWeight];
 
-        } elseif ($minWeight > 0 && $maxWeight > 0) {
+        } elseif ($minWeight && $maxWeight) {
             $sql = '
               SELECT name,weight,nameRUS,nameLAT
               FROM animals AS an
@@ -50,9 +50,6 @@ if (count($_GET) > 0) {
         }
         if ($sql) {
             $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            echo $sth->rowCount();
-            var_dump($sth);
-            var_dump($sth->fetch());
             $sth->execute($param);
         }
         if (!$sth || $sth->rowCount() == 0) {
