@@ -25,7 +25,6 @@ $maxWeight = isset($_GET['maxWeight']) ? intval($_GET['maxWeight']) > 0 ? intval
 
 if (count($_GET) > 0) {
     try {
-        $dbh = new PDO($dsn, $user, $pass);
         if ($minWeight >= 0 && !($maxWeight >= 0)) {
             $sql = '
               SELECT name,weight,nameRUS,nameLAT
