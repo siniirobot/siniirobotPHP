@@ -91,7 +91,11 @@ if (count($_GET) > 0) {
             </thead>
             <tbody>
             <?php while ($row = $sth->fetch()) {
-                echo '<tr><td>' . $row['name'] . '</td><td>' . $row['weight'] . '</td><td>' . $row['nameRUS'] . '</td><td>'.$row['nameLAT'].'</td></tr>';
+                echo '<tr>';
+                foreach ($row as $key){
+                    echo '<td>'.$key.'</td>';
+                }
+                echo '</tr>';
             } ?>
             </tbody>
         </table>
