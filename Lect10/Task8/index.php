@@ -50,6 +50,9 @@ if (count($_GET) > 0) {
         }
         if ($sql) {
             $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            echo $sth->rowCount();
+            var_dump($sth);
+            var_dump($sth->fetch());
             $sth->execute($param);
         }
         if (!$sth || $sth->rowCount() == 0) {

@@ -22,9 +22,11 @@ $opt = [
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
 try {
-    $sql = 'SELECT name FROM animals';
+    $sql = 'SELECT * FROM animals';
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         echo $sth->rowCount();
+        var_dump($sth);
+        var_dump($sth->fetch());
 } catch (PDOException $e) {
     echo 'Подключение не удалось: ' . $e->getMessage();
 }
