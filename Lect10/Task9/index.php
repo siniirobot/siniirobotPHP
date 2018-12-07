@@ -23,10 +23,10 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 
 try {
     $sql = 'SELECT * FROM animals';
-        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        echo $sth->rowCount();
-        var_dump($sth);
-        var_dump($sth->fetch());
+    $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $stmt = $pdo->query('SELECT * FROM animals');
+    echo $stmt->rowCount();
+    echo $sth->rowCount();
 } catch (PDOException $e) {
     echo 'Подключение не удалось: ' . $e->getMessage();
 }
@@ -37,6 +37,7 @@ try {
     <title>Задание 9</title>
 </head>
 <body>
+<form action="index.php" method="get">
     <table border="1">
         <thead>
         <tr>
@@ -47,17 +48,19 @@ try {
             <td>gender</td>
             <td>specie_id</td>
             <td>comments</td>
+            <td>Удаление</td>
         </tr>
         </thead>
         <tbody>
-        <?php while ($row = $sth->fetch()) {
+        <?php while ($row = $stmt->fetch()) {
             echo '<tr>';
-            foreach ($row as $key){
-                echo '<td>'.$key.'</td>';
+            foreach ($row as $key) {
+                echo '<td>' . $key . '</td>';
             }
-            echo '</tr>';
+            echo '<td><input type="submit" value="Удалить" name="' . $row['id'] . '"></td></tr>';
         } ?>
         </tbody>
     </table>
+</form>
 </body>
 </html>
