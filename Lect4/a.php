@@ -98,7 +98,7 @@ function foo() {
     echo "В foo()<br />\n";
 }
 
-function bar($arg = '')
+function bar2($arg = '')
 {
     echo "В bar(); аргумент был '$arg'.<br />\n";
 }

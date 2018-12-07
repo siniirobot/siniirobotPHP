@@ -40,5 +40,3 @@ echo $bookCache->getBook('Толкиен') . '</br>';
 
 echo $bookCache->getBook('Д.Роулинг') . '</br>';
 echo $book2->getTome() . '</br>';
-
-
