@@ -38,6 +38,7 @@ try {
         $lastId = $lastId + 1;
     }
     if (isset($_POST['add'])) {
+        var_dump($stmt->fetchAll());
         $name = '\'' . $_POST['name'] . '\'';
         $species = '\'' . $_POST['species'] . '\'';
         $weight = $_POST['weight'];
@@ -66,14 +67,26 @@ try {
         $gender = isset($_POST['gender']) ? $_POST['gender'] : $editRow['gender'];
         $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : $editRow['comments'];
         if (isset($_POST['save'])) {
-            $pdo->exec("UPDATE animals 
-    SET 
-    id = $lastId, name =" . '\'' . $name . '\'' . ", species =" . '\'' . $species . '\'' . ", weight = $weight, gender = " . '\'' . $gender . '\'' . " , comments = " . '\'' . $comments . '\'' . " 
+            $checkForDoubleIdErrorFlag = false;
+            $checkForDoubleIdErrorArray = $pdo->query('SELECT id FROM animals');
+            $checkForDoubleIdErrorArray = $checkForDoubleIdErrorArray->fetchAll();
+            foreach ($checkForDoubleIdErrorArray as $key => $value) {
+                foreach ($value as $values)
+                    if ($lastId == $values) {
+                        $checkForDoubleIdErrorFlag = true;
+                    }
+            }
+            if ($_SESSION['id'] != $lastId && $checkForDoubleIdErrorFlag) {
+                echo 'Вы введи id который уже есть, введите новый.';
+            } else {
+                $pdo->exec("UPDATE animals 
+    SET id = $lastId, name =" . '\'' . $name . '\'' . ", species =" . '\'' . $species . '\'' . ", weight = $weight, gender = " . '\'' . $gender . '\'' . " , comments = " . '\'' . $comments . '\'' . " 
     WHERE id = $_SESSION[id]");
-            $page = 1;
-            header('Location:index.php');
-            session_destroy();
-            exit();
+                $page = 1;
+                header('Location:index.php');
+                session_destroy();
+                exit();
+            }
         }
     }
 } catch (PDOException $e) {
