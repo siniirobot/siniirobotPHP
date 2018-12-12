@@ -51,29 +51,29 @@ try {
     }
 
     if (isset($_GET['edit']) || isset($_POST['save'])) {
+        session_start();
+        if (isset($_GET['edit'])) {
+            $_SESSION['id'] = $_GET['edit'];
+        }
         $page = 2;
         $editRow = $pdo->prepare('SELECT * FROM animals WHERE id = ?');
-        $editRow->execute([$_GET['edit']]);
+        $editRow->execute([$_SESSION['id']]);
         $editRow = $editRow->fetch();
         $lastId = isset($_POST['id']) ? intval($_POST['id']) : $editRow['id'];
         $name = isset($_POST['name']) ? $_POST['name'] : $editRow['name'];
         $species = isset($_POST['species']) ? $_POST['species'] : $editRow['species'];
         $weight = isset($_POST['weight']) ? $_POST['weight'] : $editRow['weight'];
         $gender = isset($_POST['gender']) ? $_POST['gender'] : $editRow['gender'];
-        $comments = isset($_POST['comments']) ? $_POST['comments'] : $editRow['comments'];
+        $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : $editRow['comments'];
         if (isset($_POST['save'])) {
-            var_dump($editId);
             $pdo->exec("UPDATE animals 
-SET 
-id = $lastId, 
-name =" . '\'' . $name . '\'' . ", 
-species =" . '\'' . $species . '\'' . ", 
-weight = $weight, 
-gender = " . '\'' . $gender . '\'' . " , 
-comments = " . '\'' . $comments . '\'' . " 
-WHERE id = $editId");
-            $page = 2;
-
+    SET 
+    id = $lastId, name =" . '\'' . $name . '\'' . ", species =" . '\'' . $species . '\'' . ", weight = $weight, gender = " . '\'' . $gender . '\'' . " , comments = " . '\'' . $comments . '\'' . " 
+    WHERE id = $_SESSION[id]");
+            $page = 1;
+            header('Location:index.php');
+            session_destroy();
+            exit();
         }
     }
 } catch (PDOException $e) {
