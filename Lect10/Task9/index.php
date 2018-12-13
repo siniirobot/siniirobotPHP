@@ -21,7 +21,7 @@ $opt = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
-$lastId = isset($_POST['id']) ? intval($_POST['id']) : null;
+
 try {
     $sql = 'SELECT * FROM animals';
     $stmt = $pdo->query($sql);
@@ -31,6 +31,7 @@ try {
         header('Location:index.php');
         exit();
     }
+    $lastId = isset($_POST['id']) ? intval($_POST['id']) : null;
     if (!isset($_POST['id'])) {
         $lastId = $pdo->query('SELECT id FROM animals ORDER BY id DESC LIMIT 1');
         $lastId = $lastId->fetch();
@@ -38,17 +39,29 @@ try {
         $lastId = $lastId + 1;
     }
     if (isset($_POST['add'])) {
-        var_dump($stmt->fetchAll());
-        $name = '\'' . $_POST['name'] . '\'';
-        $species = '\'' . $_POST['species'] . '\'';
-        $weight = $_POST['weight'];
-        $gender = '\'' . $_POST['gender'] . '\'';
-        $comments = isset($_POST['comments']) ? htmlspecialchars('\'' . $_POST['comments'] . '\'') : null;
-        $pdo->exec("INSERT INTO animals (id,name,species,weight,gender,comments) VALUES 
+        $checkForDoubleIdErrorFlag = false;
+        $checkForDoubleIdErrorArray = $pdo->query('SELECT id FROM animals');
+        $checkForDoubleIdErrorArray = $checkForDoubleIdErrorArray->fetchAll();
+        foreach ($checkForDoubleIdErrorArray as $key => $value) {
+            foreach ($value as $values)
+                if ($lastId == $values) {
+                    $checkForDoubleIdErrorFlag = true;
+                }
+        }
+        if ($checkForDoubleIdErrorFlag) {
+            echo 'Вы ввели id который уже есть, введите новый.';
+        } else {
+            $name = '\'' . $_POST['name'] . '\'';
+            $species = '\'' . $_POST['species'] . '\'';
+            $weight = $_POST['weight'];
+            $gender = '\'' . $_POST['gender'] . '\'';
+            $comments = isset($_POST['comments']) ? htmlspecialchars('\'' . $_POST['comments'] . '\'') : null;
+            $pdo->exec("INSERT INTO animals (id,name,species,weight,gender,comments) VALUES 
 	($lastId,$name,$species,$weight,$gender,$comments)");
-        $lastId = null;
-        header('Location:index.php');
-        exit();
+            $lastId = null;
+            header('Location:index.php');
+            exit();
+        }
     }
 
     if (isset($_GET['edit']) || isset($_POST['save'])) {
@@ -77,7 +90,7 @@ try {
                     }
             }
             if ($_SESSION['id'] != $lastId && $checkForDoubleIdErrorFlag) {
-                echo 'Вы введи id который уже есть, введите новый.';
+                echo 'Вы ввели id который уже есть, введите новый.';
             } else {
                 $pdo->exec("UPDATE animals 
     SET id = $lastId, name =" . '\'' . $name . '\'' . ", species =" . '\'' . $species . '\'' . ", weight = $weight, gender = " . '\'' . $gender . '\'' . " , comments = " . '\'' . $comments . '\'' . " 
