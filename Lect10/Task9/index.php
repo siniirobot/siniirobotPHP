@@ -48,11 +48,12 @@ try {
 
     if (isset($_GET['edit']) || isset($_POST['save'])) {
         if (isset($_GET['edit'])) {
-            $_POST['ggg'] = $_GET['edit'];
+            $checkId = $_GET['edit'];
         }
+        var_dump($_POST['ggg']);
         $page = 2;
         $editRow = $pdo->prepare('SELECT * FROM animals WHERE id = ?');
-        $editRow->execute([$_POST['ggg']]);
+        $editRow->execute([$checkId]);
         $editRow = $editRow->fetch();
         $lastId = isset($_POST['id']) ? intval($_POST['id']) : $editRow['id'];
         $name = isset($_POST['name']) ? $_POST['name'] : $editRow['name'];
@@ -71,7 +72,7 @@ try {
                         $checkForDoubleIdErrorFlag = true;
                     }
             }
-            if ($_POST['ggg'] != $lastId && $checkForDoubleIdErrorFlag) {
+            if ($checkId != $lastId && $checkForDoubleIdErrorFlag) {
                 echo 'Вы ввели id который уже есть, введите новый.';
             } else {
                 $update = $pdo->prepare('UPDATE animals 
@@ -82,7 +83,7 @@ try {
         gender =?,
         comments =? 
     WHERE id = ?;');
-                $update->execute([$lastId,$name,$species,$weight,$gender,$comments,$_POST['ggg']]);
+                $update->execute([$lastId,$name,$species,$weight,$gender,$comments,$checkId]);
                 $page = 1;
                 header('Location:index.php');
                 exit();
@@ -179,7 +180,7 @@ try {
             <tr>
                 <td>Id</td>
                 <td><input type="text" name="id" value="<?= $lastId ?>">
-                    <input type="hidden" name="ggg" value="<?= $_POST['id'] ?>">
+                    <input type="hidden" name="ggg" value="<?= $checkId ?>">
                 </td>
             </tr>
             <tr>
