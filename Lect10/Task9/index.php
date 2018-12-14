@@ -24,54 +24,35 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 
 try {
     $sql = 'SELECT * FROM animals';
-    $stmt = $pdo->query($sql);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
     if (isset($_GET['del'])) {
-        $pdo->exec('DELETE FROM animals WHERE id = ' . $_GET['del']);
+        $del = $pdo->prepare('DELETE FROM animals WHERE id = ?');
+        $del->execute([$_GET['del']]);
         $_GET['del'] = false;
         header('Location:index.php');
         exit();
     }
-    $lastId = isset($_POST['id']) ? intval($_POST['id']) : null;
-    if (!isset($_POST['id'])) {
-        $lastId = $pdo->query('SELECT id FROM animals ORDER BY id DESC LIMIT 1');
-        $lastId = $lastId->fetch();
-        $lastId = $lastId['id'];
-        $lastId = $lastId + 1;
-    }
     if (isset($_POST['add'])) {
-        $checkForDoubleIdErrorFlag = false;
-        $checkForDoubleIdErrorArray = $pdo->query('SELECT id FROM animals');
-        $checkForDoubleIdErrorArray = $checkForDoubleIdErrorArray->fetchAll();
-        foreach ($checkForDoubleIdErrorArray as $key => $value) {
-            foreach ($value as $values)
-                if ($lastId == $values) {
-                    $checkForDoubleIdErrorFlag = true;
-                }
-        }
-        if ($checkForDoubleIdErrorFlag) {
-            echo 'Вы ввели id который уже есть, введите новый.';
-        } else {
-            $name = '\'' . $_POST['name'] . '\'';
-            $species = '\'' . $_POST['species'] . '\'';
-            $weight = $_POST['weight'];
-            $gender = '\'' . $_POST['gender'] . '\'';
-            $comments = isset($_POST['comments']) ? htmlspecialchars('\'' . $_POST['comments'] . '\'') : null;
-            $pdo->exec("INSERT INTO animals (id,name,species,weight,gender,comments) VALUES 
-	($lastId,$name,$species,$weight,$gender,$comments)");
-            $lastId = null;
-            header('Location:index.php');
-            exit();
-        }
+        $name = $_POST['name'];
+        $species = $_POST['species'];
+        $weight = $_POST['weight'];
+        $gender = $_POST['gender'];
+        $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : null;
+        $insert = $pdo->prepare('INSERT INTO animals (name,species,weight,gender,comments) VALUES 
+	(?,?,?,?,?)');
+        $insert->execute([$name, $species, $weight, $gender, $comments]);
+        header('Location:index.php');
+        exit();
     }
 
     if (isset($_GET['edit']) || isset($_POST['save'])) {
-        session_start();
         if (isset($_GET['edit'])) {
-            $_SESSION['id'] = $_GET['edit'];
+            $_POST['ggg'] = $_GET['edit'];
         }
         $page = 2;
         $editRow = $pdo->prepare('SELECT * FROM animals WHERE id = ?');
-        $editRow->execute([$_SESSION['id']]);
+        $editRow->execute([$_POST['ggg']]);
         $editRow = $editRow->fetch();
         $lastId = isset($_POST['id']) ? intval($_POST['id']) : $editRow['id'];
         $name = isset($_POST['name']) ? $_POST['name'] : $editRow['name'];
@@ -81,7 +62,8 @@ try {
         $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : $editRow['comments'];
         if (isset($_POST['save'])) {
             $checkForDoubleIdErrorFlag = false;
-            $checkForDoubleIdErrorArray = $pdo->query('SELECT id FROM animals');
+            $checkForDoubleIdErrorArray = $pdo->prepare('SELECT id FROM animals');
+            $checkForDoubleIdErrorArray->execute();
             $checkForDoubleIdErrorArray = $checkForDoubleIdErrorArray->fetchAll();
             foreach ($checkForDoubleIdErrorArray as $key => $value) {
                 foreach ($value as $values)
@@ -89,15 +71,20 @@ try {
                         $checkForDoubleIdErrorFlag = true;
                     }
             }
-            if ($_SESSION['id'] != $lastId && $checkForDoubleIdErrorFlag) {
+            if ($_POST['ggg'] != $lastId && $checkForDoubleIdErrorFlag) {
                 echo 'Вы ввели id который уже есть, введите новый.';
             } else {
-                $pdo->exec("UPDATE animals 
-    SET id = $lastId, name =" . '\'' . $name . '\'' . ", species =" . '\'' . $species . '\'' . ", weight = $weight, gender = " . '\'' . $gender . '\'' . " , comments = " . '\'' . $comments . '\'' . " 
-    WHERE id = $_SESSION[id]");
+                $update = $pdo->prepare('UPDATE animals 
+    SET id = ?,
+        name =?,
+        species =?,
+        weight =?,
+        gender =?,
+        comments =? 
+    WHERE id = ?;');
+                $update->execute([$lastId,$name,$species,$weight,$gender,$comments,$_POST['ggg']]);
                 $page = 1;
                 header('Location:index.php');
-                session_destroy();
                 exit();
             }
         }
@@ -149,10 +136,6 @@ try {
             </thead>
             <tbody>
             <tr>
-                <td>Id</td>
-                <td><input type="text" name="id" placeholder="<?= $lastId ?>"></td>
-            </tr>
-            <tr>
                 <td>Имя животного</td>
                 <td><input type="text" name="name" placeholder="<?= 'Введите имя питомца.' ?>"
                            pattern="^[-А-ЯA-Zа-яa-zЁё\s]+$" required></td>
@@ -196,6 +179,7 @@ try {
             <tr>
                 <td>Id</td>
                 <td><input type="text" name="id" value="<?= $lastId ?>">
+                    <input type="hidden" name="ggg" value="<?= $_POST['id'] ?>">
                 </td>
             </tr>
             <tr>
