@@ -21,7 +21,7 @@ class TestCache implements CacheInterface
     public function getByKey(string $key): string
     {
         if (array_key_exists($key, $this->cache)) {
-            return $this->cache[$key]->getContent();
+            return $this->cache[$key];
         } else {
             return 'Такой книги с таким ключем нет ';
         }

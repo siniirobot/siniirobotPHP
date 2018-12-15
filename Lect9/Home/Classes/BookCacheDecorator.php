@@ -23,14 +23,15 @@ class BookCacheDecorator
     /**
      * Вернуть содержимое кэша по ключу и если нету, то создать его а затем вернуть.
      * @param string $id
-     * @return string
+     * @return array
      */
-    public function getBook(string $id): string
+    public function getBook(string $id): array
     {
-        if ($this->cache->checkByKey($id)) {
-            return $this->cache->getByKey($id);
+
+        if (!$this->cache->checkByKey($id)) {
+            $this->cache->setByKey($id, $this->book->getContent());
+            return [$this->cache->getByKey($id)];
         }
-        $this->cache->setByKey($this->book->getAuthor(), $this->book->getContent());
-        return $this->cache->getByKey($id);
+        return [$this->cache->getByKey($id).'from cache'];
     }
 }

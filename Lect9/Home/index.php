@@ -31,12 +31,14 @@ echo $book->getTome() . '</br>';
 $cache = new TestCache();
 
 $bookCache = new BookCacheDecorator($book, $cache);
-
+echo var_dump($bookCache->getBook('Д.Роулинг')).'</br>';
 
 $book2 = new Book2('Две Башни', 1500, 'Толкиен', 3000, 'Эпилог', 2, 3);
 $book2->setContent('./Властелин Колец.txt');
 
-echo $bookCache->getBook('Толкиен') . '</br>';
+$bookCache = new BookCacheDecorator($book2,$cache);
+echo var_dump($bookCache->getBook('Д.Роулинг')).'</br>';
+echo var_dump($bookCache->getBook('Д.Роулинг')).'</br>';
+echo var_dump($bookCache->getBook('Д.Роулинг')).'</br>';
 
-echo $bookCache->getBook('Д.Роулинг') . '</br>';
 echo $book2->getTome() . '</br>';
