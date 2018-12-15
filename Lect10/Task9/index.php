@@ -24,6 +24,7 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 try {
     $sql = 'SELECT * FROM animals';
     $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+
     $stmt = $pdo->query('SELECT * FROM animals');
     echo $stmt->rowCount();
     echo $sth->rowCount();
