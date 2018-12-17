@@ -50,10 +50,9 @@ try {
         if (isset($_GET['edit'])) {
             $checkId = $_GET['edit'];
         }
-        var_dump($_POST['ggg']);
         $page = 2;
         $editRow = $pdo->prepare('SELECT * FROM animals WHERE id = ?');
-        $editRow->execute([$checkId]);
+        $editRow->execute([isset($_POST['save_id']) ? intval($_POST['save_id']) : $checkId]);
         $editRow = $editRow->fetch();
         $lastId = isset($_POST['id']) ? intval($_POST['id']) : $editRow['id'];
         $name = isset($_POST['name']) ? $_POST['name'] : $editRow['name'];
@@ -62,32 +61,18 @@ try {
         $gender = isset($_POST['gender']) ? $_POST['gender'] : $editRow['gender'];
         $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : $editRow['comments'];
         if (isset($_POST['save'])) {
-            $checkForDoubleIdErrorFlag = false;
-            $checkForDoubleIdErrorArray = $pdo->prepare('SELECT id FROM animals');
-            $checkForDoubleIdErrorArray->execute();
-            $checkForDoubleIdErrorArray = $checkForDoubleIdErrorArray->fetchAll();
-            foreach ($checkForDoubleIdErrorArray as $key => $value) {
-                foreach ($value as $values)
-                    if ($lastId == $values) {
-                        $checkForDoubleIdErrorFlag = true;
-                    }
-            }
-            if ($checkId != $lastId && $checkForDoubleIdErrorFlag) {
-                echo 'Вы ввели id который уже есть, введите новый.';
-            } else {
                 $update = $pdo->prepare('UPDATE animals 
-    SET id = ?,
-        name =?,
+    SET name =?,
         species =?,
         weight =?,
         gender =?,
         comments =? 
     WHERE id = ?;');
-                $update->execute([$lastId,$name,$species,$weight,$gender,$comments,$checkId]);
+                $update->execute([$name,$species,$weight,$gender,$comments,$_POST['save_id']]);
                 $page = 1;
                 header('Location:index.php');
                 exit();
-            }
+
         }
     }
 } catch (PDOException $e) {
@@ -177,12 +162,8 @@ try {
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Id</td>
-                <td><input type="text" name="id" value="<?= $lastId ?>">
-                    <input type="hidden" name="ggg" value="<?= $checkId ?>">
-                </td>
-            </tr>
+                    <input type="hidden" name="save_id" value="<?= $checkId ?>">
+
             <tr>
                 <td>Имя животного</td>
                 <td><input type="text" name="name" value="<?= $name ?>"
