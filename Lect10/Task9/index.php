@@ -34,10 +34,10 @@ try {
         exit();
     }
     if (isset($_POST['add'])) {
-        $name = $_POST['name'];
-        $species = $_POST['species'];
-        $weight = $_POST['weight'];
-        $gender = $_POST['gender'];
+        $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : null;
+        $species = isset($_POST['species']) ? htmlspecialchars($_POST['species']) : null;;
+        $weight = isset($_POST['weight']) ? intval($_POST['name']) : null;;
+        $gender = isset($_POST['gender']) ? htmlspecialchars($_POST['gender']) : null;
         $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : null;
         $insert = $pdo->prepare('INSERT INTO animals (name,species,weight,gender,comments) VALUES 
 	(?,?,?,?,?)');
@@ -54,24 +54,23 @@ try {
         $editRow = $pdo->prepare('SELECT * FROM animals WHERE id = ?');
         $editRow->execute([isset($_POST['save_id']) ? intval($_POST['save_id']) : $checkId]);
         $editRow = $editRow->fetch();
-        $lastId = isset($_POST['id']) ? intval($_POST['id']) : $editRow['id'];
-        $name = isset($_POST['name']) ? $_POST['name'] : $editRow['name'];
-        $species = isset($_POST['species']) ? $_POST['species'] : $editRow['species'];
-        $weight = isset($_POST['weight']) ? $_POST['weight'] : $editRow['weight'];
-        $gender = isset($_POST['gender']) ? $_POST['gender'] : $editRow['gender'];
+        $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : $editRow['name'];
+        $species = isset($_POST['species']) ? htmlspecialchars($_POST['species']) : $editRow['species'];
+        $weight = isset($_POST['weight']) ? intval($_POST['weight']) : $editRow['weight'];
+        $gender = isset($_POST['gender']) ? htmlspecialchars($_POST['gender']) : $editRow['gender'];
         $comments = isset($_POST['comments']) ? htmlspecialchars($_POST['comments']) : $editRow['comments'];
         if (isset($_POST['save'])) {
-                $update = $pdo->prepare('UPDATE animals 
+            $update = $pdo->prepare('UPDATE animals 
     SET name =?,
         species =?,
         weight =?,
         gender =?,
         comments =? 
     WHERE id = ?;');
-                $update->execute([$name,$species,$weight,$gender,$comments,$_POST['save_id']]);
-                $page = 1;
-                header('Location:index.php');
-                exit();
+            $update->execute([$name, $species, $weight, $gender, $comments, $_POST['save_id']]);
+            $page = 1;
+            header('Location:index.php');
+            exit();
 
         }
     }
@@ -83,6 +82,14 @@ try {
 <html>
 <head>
     <title>Задание 9</title>
+    <style>
+        input {
+            width: 300px;
+            border: none;
+            outline: none;
+        }
+
+    </style>
 </head>
 <body>
 <?php if ($page == 1) { ?>
@@ -124,22 +131,22 @@ try {
             <tr>
                 <td>Имя животного</td>
                 <td><input type="text" name="name" placeholder="<?= 'Введите имя питомца.' ?>"
-                           pattern="^[-А-ЯA-Zа-яa-zЁё\s]+$" required></td>
+                           required></td>
             </tr>
             <tr>
                 <td>Вид животного</td>
                 <td><input type="text" name="species" placeholder="<?= 'Введите вид питомца.' ?>"
-                           pattern="^[-А-ЯA-Zа-яa-zЁё\s]+$" required></td>
+                           required></td>
             </tr>
             <tr>
                 <td>Вес животного</td>
-                <td><input type="text" name="weight" placeholder="<?= 'Введите вес питомца.' ?>" pattern="^[0-9]+$"
+                <td><input type="text" name="weight" placeholder="<?= 'Введите вес питомца в граммах целым числом.' ?>"
                            required></td>
             </tr>
             <tr>
                 <td>Пол животного</td>
-                <td><input type="text" name="gender" placeholder="<?= 'Введите пол питомца в виде М или Ж.' ?>"
-                           pattern="[МмЖж]" required></td>
+                <td><input type="text" name="gender" placeholder="<?= 'Введите пол питомца в формате М или Ж.' ?>"
+                           required></td>
             </tr>
             <tr>
                 <td>Комментарии</td>
@@ -162,31 +169,36 @@ try {
             </tr>
             </thead>
             <tbody>
-                    <input type="hidden" name="save_id" value="<?= $checkId ?>">
+            <input type="hidden" name="save_id" value="<?= $checkId ?>">
 
             <tr>
                 <td>Имя животного</td>
                 <td><input type="text" name="name" value="<?= $name ?>"
-                           pattern="^[-А-ЯA-Zа-яa-zЁё\s]+$" required></td>
+                           required></td>
+                <td><p>Введите имя питомца.</p></td>
             </tr>
             <tr>
                 <td>Вид животного</td>
                 <td><input type="text" name="species" value="<?= $species ?>"
-                           pattern="^[-А-ЯA-Zа-яa-zЁё\s]+$" required></td>
+                           required></td>
+                <td><p>Введите вид питомца.</p></td>
             </tr>
             <tr>
                 <td>Вес животного</td>
-                <td><input type="text" name="weight" value="<?= $weight ?>" pattern="^[0-9]+$"
+                <td><input type="text" name="weight" value="<?= $weight ?>"
                            required></td>
+                <td><p>Введите вес питомца в граммах целым числом.</p></td>
             </tr>
             <tr>
                 <td>Пол животного</td>
                 <td><input type="text" name="gender" value="<?= $gender ?>"
-                           pattern="[МмЖж]" required></td>
+                           required></td>
+                <td><p>Введите пол питомца в формате М или Ж.</p></td>
             </tr>
             <tr>
                 <td>Комментарии</td>
                 <td><input type="text" name="comments" value="<?= $comments ?>"></td>
+                <td><p>Комментарии.</p></td>
             </tr>
             <tr>
                 <td></td>
