@@ -57,7 +57,6 @@ class animalType
 
     /**
      * Создание обьекта с такими же данными как и у последней записи в таблице.
-     * @return null
      */
     public function read()
     {
@@ -70,7 +69,6 @@ class animalType
             $this->nameLAT = $lastRow['nameLAT'];
         }else{
             echo 'Нет такого id'.'</br>';
-            return null;
         }
     }
 
@@ -79,8 +77,17 @@ class animalType
      */
     public function update()
     {
-        $query = DB::pdo()->prepare('UPDATE animalType SET nameRUS = ? , nameLAT = ? WHERE id = ?');
-        $query->execute([$this->nameRUS, $this->nameLAT, $this->id]);
+        try{
+            $query = DB::pdo()->prepare('UPDATE animalType SET nameRUS = ? , nameLAT = ? WHERE id = ?');
+            $query->execute([$this->nameRUS, $this->nameLAT, $this->id]);
+            if ($query->rowCount() == 0 ){
+                echo 'Запись не была изменена.</br>';
+            }else{
+                echo 'Запись была изменена.';
+            }
+        }catch (Exception $e){
+            echo $e;
+        }
     }
 
     /**
@@ -88,7 +95,17 @@ class animalType
      */
     public function delete()
     {
-        $query = DB::pdo()->prepare('DELETE FROM animalType WHERE id = ?');
-        $query->execute([$this->id]);
+        try{
+            $query = DB::pdo()->prepare('DELETE FROM animalType WHERE id = ?');
+            $query->execute([$this->id]);
+            if ($query->rowCount() == 0 ){
+                echo 'Запись не была удалена.</br>';
+            }else{
+                echo 'Запись была удалена.';
+            }
+        }catch (Exception $e) {
+            echo $e;
+        }
+
     }
 }
