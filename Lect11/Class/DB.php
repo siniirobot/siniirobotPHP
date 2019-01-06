@@ -34,7 +34,6 @@ final class DB
     public static function pdo()
     {
         if (is_null(self::$_pdo)){
-            echo 'Создается соеденнение';
             try{
                 self::$_pdo = new PDO(
                     'mysql:host=' . self::$dbhost . ';dbname=' . self::$dbName,self::$dbUser,self::$pdPass
