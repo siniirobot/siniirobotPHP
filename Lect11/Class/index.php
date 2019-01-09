@@ -6,14 +6,13 @@
  * Time: 11:20
  */
 
-include_once __DIR__ . '/animalType.php';
+include_once __DIR__ . '/doctors.php';
 
-$animalType = new animalType();
 
-$animalType->find(6);
-echo $animalType->nameRUS.'</br>';
-echo $animalType->nameLAT.'</br>';
-$animalType->nameRUS = 'Синица';
-$animalType->nameLAT ='Sinica';
-//$animalType->save();
-echo $animalType->read();
+$cat = new doctors();
+$cat = $cat->find(1);
+$cat->nameLAT = 'Арнольд Шварцнегер';
+$cat->update();
+$olen = new doctors();
+$olen = $olen->find(2);
+var_dump($olen);
