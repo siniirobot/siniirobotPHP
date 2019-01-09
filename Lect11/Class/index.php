@@ -10,5 +10,10 @@ include_once __DIR__ . '/animalType.php';
 
 $animalType = new animalType();
 
-echo $animalType->getFind(16);
-
+$animalType->find(6);
+echo $animalType->nameRUS.'</br>';
+echo $animalType->nameLAT.'</br>';
+$animalType->nameRUS = 'Синица';
+$animalType->nameLAT ='Sinica';
+//$animalType->save();
+echo $animalType->read();
