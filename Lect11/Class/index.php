@@ -31,3 +31,7 @@ $findRow->update();
 
 $findRow->receipt_date = '2500-12-18';
 $findRow->update();
+
+$deleteRow = new doctors();
+$deleteRow = $deleteRow->find(30);
+$deleteRow->delete();

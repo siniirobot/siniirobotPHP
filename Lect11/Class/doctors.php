@@ -36,8 +36,8 @@ class doctors
     {
         $query = DB::pdo()->prepare('SELECT * FROM doctors WHERE id = ?');
         $query->execute([$id]);
-        $query = $query->fetch(PDO::FETCH_ASSOC);
-        if ($query) {
+        if ($query->rowCount()) {
+            $query = $query->fetch(PDO::FETCH_ASSOC);
             $row = new doctors();
             $row->id = $query['id'];
             $row->lastName = $query['last_name'];
@@ -49,7 +49,6 @@ class doctors
             return $row;
         } else {
             echo 'Нет такого id' . '</br>';
-            return false;
         }
     }
 
@@ -119,14 +118,14 @@ class doctors
     {
         $query = DB::pdo()->prepare('SELECT * FROM doctors ORDER BY id DESC LIMIT 1');
         $query->execute();
-        $lastRow = $query->fetch(PDO::FETCH_ASSOC);
-        if ($lastRow) {
+        if ($query->rowCount()) {
+            $lastRow = $query->fetch(PDO::FETCH_ASSOC);
             $this->id = $lastRow['id'];
             $this->lastName = $lastRow['last_name'];
             $this->name = $lastRow['name'];
             $this->phone = $lastRow['phone'];
             $this->salary = $lastRow['salary'];
-            $this->receipt_date= $lastRow['receipt_date'];
+            $this->receipt_date = $lastRow['receipt_date'];
             echo 'Запись прочитана.</br>';
         } else {
             echo 'Нет такого id' . '</br>';
@@ -148,7 +147,7 @@ class doctors
                 if (preg_match('/^((\+?7|8)[\s \-]?){1}((\(\d{3}\))|(\d{3})){1}([\s \-]?){1}(\d{3}[\s \-]?\d{2}[\s \-]?\d{2}){1}$/', $phone)) {
                     if (preg_match('/\d{4}-\d{2}-\d{2}/', $receiptDate)) {
                         $query = DB::pdo()->prepare('UPDATE doctors SET last_name = ?, name = ?, phone = ?, salary = ?, receipt_date = ? WHERE id = ?');
-                        $query->execute([$lastName, $name, $phone, $salary, $receiptDate,$this->id]);
+                        $query->execute([$lastName, $name, $phone, $salary, $receiptDate, $this->id]);
                         echo 'Запись успешно обновлена.</br>';
                         return true;
                     } else {
@@ -171,17 +170,13 @@ class doctors
      */
     public function delete()
     {
-        try {
-            $query = DB::pdo()->prepare('DELETE FROM animalType WHERE id = ?');
+        if ($this->id == null) {
+            echo 'Записи с таким id не существует.</br>';
+            return false;
+        } else {
+            $query = DB::pdo()->prepare('DELETE FROM doctors WHERE id = ?');
             $query->execute([$this->id]);
-            if ($query->rowCount() == 0) {
-                echo 'Запись не была удалена.</br>';
-            } else {
-                echo 'Запись была удалена.';
-            }
-        } catch (Exception $e) {
-            echo $e;
+            echo 'Запись удалена.</br>';
         }
-
     }
 }
