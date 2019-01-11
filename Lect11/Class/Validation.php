@@ -57,29 +57,32 @@ class Validation extends doctors
 
     public function validation()
     {
-        if ($this->lastName != null && $this->name != null && $this->salary != null && $this->receiptDate != null) {
-            $lastName = $this->clean($this->lastName);
-            $name = $this->clean($this->name);
-            $phone = $this->clean($this->phone);
-            $salary = (float)$this->clean($this->salary);
-            $receiptDate = $this->clean($this->receiptDate);
-            if ($this->checkLength($lastName, 1, 255) && $this->checkLength($name, 1, 255) && $this->checkLength($phone, 12, 18)) {
-                if (preg_match('/^((\+?7|8)[\s \-]?){1}((\(\d{3}\))|(\d{3})){1}([\s \-]?){1}(\d{3}[\s \-]?\d{2}[\s \-]?\d{2}){1}$/', $phone)) {
-                    if (preg_match('/\d{4}-\d{2}-\d{2}/', $receiptDate)) {
-                        return true;
-                    } else {
-                        echo 'Вы ввели не правильно дату, нужно в формате ГГГГ-ММ-ДД.</br>';
-                    }
-                } else {
-                    echo 'Вы ввели неправильно номер телефона,нужно в формате +X-(XXX)-XXX-XX-XX.</br>';
-                }
-            } else {
-                echo 'Вы ввели слишком длинные данные.</br>';
-            }
-        } else {
+        if ($this->lastName == null || $this->name == null || $this->salary == null || $this->receiptDate == null) {
             echo 'Нельзя оставлять строки пустыми.</br>';
             return false;
         }
+
+        $this->lastName = $this->clean($this->lastName);
+        $this->name = $this->clean($this->name);
+        $this->phone = $this->clean($this->phone);
+        $this->salary = (float)$this->clean($this->salary);
+        $this->receiptDate = $this->clean($this->receiptDate);
+
+        if (!$this->checkLength( $this->lastName, 1, 255) || !$this->checkLength( $this->name, 1, 255) || !$this->checkLength( $this->phone, 12, 18)) {
+            echo 'Вы ввели слишком длинные или короткие данные.</br>';
+            return false;
+        }
+
+        if (!preg_match('/^((\+?7|8)[\s \-]?){1}((\(\d{3}\))|(\d{3})){1}([\s \-]?){1}(\d{3}[\s \-]?\d{2}[\s \-]?\d{2}){1}$/',  $this->phone)) {
+            echo 'Вы ввели неправильно номер телефона,нужно в формате +X-(XXX)-XXX-XX-XX.</br>';
+            return false;
+        }
+
+        if (!preg_match('/\d{4}-\d{2}-\d{2}/',  $this->receiptDate)) {
+            echo 'Вы ввели не правильно дату, нужно в формате ГГГГ-ММ-ДД.</br>';
+            return false;
+        }
+        return true;
     }
 
 
