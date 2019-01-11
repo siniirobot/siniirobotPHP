@@ -7,6 +7,7 @@
  */
 
 require_once __DIR__ . '/DB.php';
+require_once __DIR__ . '/Validation.php';
 
 class doctors
 {
@@ -15,7 +16,7 @@ class doctors
     public $name;
     public $phone;
     public $salary;
-    public $receipt_date;
+    public $receiptDate;
 
     public function __construct()
     {
@@ -24,7 +25,7 @@ class doctors
         $this->name = null;
         $this->phone = null;
         $this->salary = null;
-        $this->receipt_date = null;
+        $this->receiptDate = null;
     }
 
     /**
@@ -44,7 +45,7 @@ class doctors
             $row->name = $query['name'];
             $row->phone = $query['phone'];
             $row->salary = $query['salary'];
-            $row->receipt_date = $query['receipt_date'];
+            $row->receiptDate = $query['receipt_date'];
             echo 'Запись прочитана.</br>';
             return $row;
         } else {
@@ -53,60 +54,20 @@ class doctors
     }
 
     /**
-     * Удаляет пробелы из начала и конца строки.
-     * Удаляет экранированные символы.
-     * Удаляет HTML и PHP теги.
-     * Преобразует спец символы символы.
-     * @param $value
-     * @return string
-     */
-    function clean($value)
-    {
-        $value = trim($value);
-        $value = stripslashes($value);
-        $value = strip_tags($value);
-        $value = htmlspecialchars($value);
-
-        return $value;
-    }
-
-    function checkLength($value, $min, $max)
-    {
-        return mb_strlen($value) <= $max && mb_strlen($value) > $min;
-    }
-
-    /**
      * Создание нового обьекта/записи и добавление ее в конец списка.
      */
     public function create()
     {
-        if ($this->lastName != null && $this->name != null && $this->salary != null && $this->receipt_date != null) {
-            $lastName = $this->clean($this->lastName);
-            $name = $this->clean($this->name);
-            $phone = $this->clean($this->phone);
-            $salary = (float)$this->clean($this->salary);
-            $receiptDate = $this->clean($this->receipt_date);
-            if ($this->checkLength($lastName, 1, 255) && $this->checkLength($name, 1, 255) && $this->checkLength($phone, 12, 18)) {
-                if (preg_match('/^((\+?7|8)[\s \-]?){1}((\(\d{3}\))|(\d{3})){1}([\s \-]?){1}(\d{3}[\s \-]?\d{2}[\s \-]?\d{2}){1}$/', $phone)) {
-                    if (preg_match('/\d{4}-\d{2}-\d{2}/', $receiptDate)) {
-                        $query = DB::pdo()->prepare('INSERT INTO doctors (last_name, name, phone, salary, receipt_date) VALUE (?,?,?,?,?)');
-                        $query->execute([$lastName, $name, $phone, $salary, $receiptDate]);
-                        $query = DB::pdo()->prepare('SELECT * FROM doctors ORDER BY id DESC LIMIT 1');
-                        $query->execute();
-                        $this->id = $query->fetch(PDO::FETCH_ASSOC)['id'];
-                        echo 'Запись успешно добавлена.</br>';
-                        return true;
-                    } else {
-                        echo 'Вы ввели не правильно дату, нужно в формате ГГГГ-ММ-ДД.</br>';
-                    }
-                } else {
-                    echo 'Вы ввели неправильно номер телефона,нужно в формате +X-(XXX)-XXX-XX-XX.</br>';
-                }
-            } else {
-                echo 'Вы ввели слишком длинные данные.</br>';
-            }
+        $doctor = new Validation($this);
+        if ($doctor->validation()) {
+            $query = DB::pdo()->prepare('INSERT INTO doctors (last_name, name, phone, salary, receipt_date) VALUE (?,?,?,?,?)');
+            $query->execute([$doctor->lastName, $doctor->name, $doctor->phone, $doctor->salary, $doctor->receiptDate]);
+            $query = DB::pdo()->prepare('SELECT * FROM doctors ORDER BY id DESC LIMIT 1');
+            $query->execute();
+            $this->id = $query->fetch(PDO::FETCH_ASSOC)['id'];
+            echo 'Запись успешно добавлена.</br>';
+            return true;
         } else {
-            echo 'Нельзя оставлять строки пустыми.</br>';
             return false;
         }
     }
@@ -125,7 +86,7 @@ class doctors
             $this->name = $lastRow['name'];
             $this->phone = $lastRow['phone'];
             $this->salary = $lastRow['salary'];
-            $this->receipt_date = $lastRow['receipt_date'];
+            $this->receiptDate = $lastRow['receipt_date'];
             echo 'Запись прочитана.</br>';
         } else {
             echo 'Нет такого id' . '</br>';
@@ -137,30 +98,13 @@ class doctors
      */
     public function update()
     {
-        if ($this->lastName != null && $this->name != null && $this->salary != null && $this->receipt_date != null) {
-            $lastName = $this->clean($this->lastName);
-            $name = $this->clean($this->name);
-            $phone = $this->clean($this->phone);
-            $salary = (float)$this->clean($this->salary);
-            $receiptDate = $this->clean($this->receipt_date);
-            if ($this->checkLength($lastName, 1, 255) && $this->checkLength($name, 1, 255) && $this->checkLength($phone, 12, 18)) {
-                if (preg_match('/^((\+?7|8)[\s \-]?){1}((\(\d{3}\))|(\d{3})){1}([\s \-]?){1}(\d{3}[\s \-]?\d{2}[\s \-]?\d{2}){1}$/', $phone)) {
-                    if (preg_match('/\d{4}-\d{2}-\d{2}/', $receiptDate)) {
-                        $query = DB::pdo()->prepare('UPDATE doctors SET last_name = ?, name = ?, phone = ?, salary = ?, receipt_date = ? WHERE id = ?');
-                        $query->execute([$lastName, $name, $phone, $salary, $receiptDate, $this->id]);
-                        echo 'Запись успешно обновлена.</br>';
-                        return true;
-                    } else {
-                        echo 'Вы ввели не правильно дату, нужно в формате ГГГГ-ММ-ДД.</br>';
-                    }
-                } else {
-                    echo 'Вы ввели неправильно номер телефона,нужно в формате +X-(XXX)-XXX-XX-XX.</br>';
-                }
-            } else {
-                echo 'Вы ввели слишком длинные данные.</br>';
-            }
+        $doctor = new Validation($this);
+        if ($doctor->validation()) {
+            $query = DB::pdo()->prepare('UPDATE doctors SET last_name = ?, name = ?, phone = ?, salary = ?, receipt_date = ? WHERE id = ?');
+            $query->execute([$doctor->lastName, $doctor->name, $doctor->phone, $doctor->salary, $doctor->receiptDate, $this->id]);
+            echo 'Запись успешно добавлена.</br>';
+            return true;
         } else {
-            echo 'Нельзя оставлять строки пустыми.</br>';
             return false;
         }
     }
