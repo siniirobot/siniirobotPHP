@@ -12,10 +12,10 @@ use Classes\Bicycle;
 use Classes\Car;
 use Classes\User;
 
-/*require_once __DIR__ . '/Classes.php/Vehicle.php';
-require_once  __DIR__ . '/Classes.php/Bicycle.php';
-require_once __DIR__ .'/Classes.php/Car.php';
-require_once __DIR__ .'/Classes.php/User.php';*/
+/*require_once __DIR__ . '/Classes/Vehicle.php';
+require_once  __DIR__ . '/Classes/Bicycle.php';
+require_once __DIR__ .'/Classes/Car.php';
+require_once __DIR__ .'/Classes/User.php';*/
 
 $bicycle = new Classes\Bicycle('GT','green',20);
 $bicycle->setDistance(100);

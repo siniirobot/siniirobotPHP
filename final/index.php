@@ -6,6 +6,20 @@
  * Time: 10:55
  */
 
+require_once __DIR__.'/autoload.php';
+
+use Databases\ActiveRecordAuth;
+use Databases\DBAuth;
+use Validation\Validation;
+
+
+$proba_pera = new ActiveRecordAuth();
+$proba_pera->delete();
+$proba_pera->login = 'Ilchenko@mail.com';
+$proba_pera->pass = 'Pass';
+$proba_pera->create();
+$proba_pera->delete();
+
 ?>
 
 

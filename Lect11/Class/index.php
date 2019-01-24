@@ -33,7 +33,6 @@ $findRow->update();
 
 $deleteRow = new doctors();
 $deleteRow = $deleteRow->find(47);
-$deleteRow->delete();
+
 
 $some = new doctors();
-$some->delete();
