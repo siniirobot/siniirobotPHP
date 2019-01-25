@@ -11,6 +11,7 @@ require_once '/study/OSPanel/domains/first/final/autoload.php';
 
 use Databases\ActiveRecordAuth;
 use Databases\DBAuth;
+use\PDO;
 
 class Validation extends ActiveRecordAuth
 {

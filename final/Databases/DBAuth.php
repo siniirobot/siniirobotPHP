@@ -7,9 +7,9 @@
  */
 
 namespace Databases;
-require_once '/study/OSPanel/domains/first/final/autoload.php';
 
-
+use \PDO;
+use \PDOException;
 final class DBAuth
 {
     protected static $_pdo = null;

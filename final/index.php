@@ -18,7 +18,7 @@ $proba_pera->delete();
 $proba_pera->login = 'Ilchenko@mail.com';
 $proba_pera->pass = 'Pass';
 $proba_pera->create();
-$proba_pera->delete();
+
 
 ?>
 
