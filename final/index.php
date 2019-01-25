@@ -10,19 +10,21 @@ require_once __DIR__.'/autoload.php';
 
 use Databases\ActiveRecordAuth;
 use Databases\DBAuth;
-use Validation\Validation;
+use Validation\ValidationAuth;
 
 
 $proba_pera = new ActiveRecordAuth();
 $proba_pera->delete();
-$proba_pera->login = 'Zytkov@mail.com';
-$proba_pera->pass = 'Pass';
+$proba_pera->login = 'Mironov@mail.com';
+$proba_pera->pass = 'PassMassFax';
 $proba_pera->create();
 
 $proba_read = new ActiveRecordAuth();
 $proba_read->read();
 echo 'Id:'.$proba_read->id .'</br>Login:'.$proba_read->login . '</br>Pass:' . $proba_read->pass . '</br>';
-
+$proba_read->pass = 'MasterPass';
+$proba_read->update();
+echo 'Id:'.$proba_read->id .'</br>Login:'.$proba_read->login . '</br>Pass:' . $proba_read->pass . '</br>';
 ?>
 
 

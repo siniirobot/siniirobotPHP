@@ -11,7 +11,7 @@ class Validation extends doctors
     protected $doctor;
 
     /**
-     * Validation constructor.
+     * ValidationAuth constructor.
      * @param $doctor
      */
     public function __construct(doctors $doctor)

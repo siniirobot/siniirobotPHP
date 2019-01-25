@@ -13,12 +13,12 @@ use Databases\ActiveRecordAuth;
 use Databases\DBAuth;
 use\PDO;
 
-class Validation extends ActiveRecordAuth
+class ValidationAuth extends ActiveRecordAuth
 {
     protected $Auth;
 
     /**
-     * Validation constructor.
+     * ValidationAuth constructor.
      * @param $ActiveRecordAuth
      */
     public function __construct(ActiveRecordAuth $auth)
@@ -85,8 +85,13 @@ class Validation extends ActiveRecordAuth
 
         $login = $this->clean($this->login);
 
-        if ($this->exist($login)) {
-            echo 'Такой пользователь уже сущесвтует.</br>';
+        if (!$this->checkLength($login,9,255)) {
+            echo 'Ваш емэил должен быть не меньше 9 символов и не больше 255.</br>';
+            return false;
+        }
+
+        if (!$this->checkLength($this->pass,6,255)) {
+            echo 'Ваш пароль должен быть не меньше 6 символов и не больше 255.</br>';
             return false;
         }
 

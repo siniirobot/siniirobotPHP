@@ -12,7 +12,7 @@ namespace Databases;
 require_once '/study/OSPanel/domains/first/final/autoload.php';
 
 use Databases\DBAuth;
-use Validation\Validation;
+use Validation\ValidationAuth;
 use \PDO;
 
 class ActiveRecordAuth
@@ -33,9 +33,13 @@ class ActiveRecordAuth
      */
     public function create()
     {
-
-        $validation = new Validation($this);
+        $validation = new ValidationAuth($this);
         $validation = $validation->validation();
+
+        if ($validation->exist($validation->login)) {
+            echo 'Такой пользователь уже сущесвтует.</br>';
+            return false;
+        }
 
         if ($validation) {
             $query = DBAuth::pdo()->prepare('INSERT INTO auth(login,pass) VALUES (?,?)');
@@ -53,7 +57,7 @@ class ActiveRecordAuth
      */
     public function delete()
     {
-        $exist = new Validation($this);
+        $exist = new ValidationAuth($this);
         if ($exist->exist($this->login)) {
             $query = DBAuth::pdo()->prepare('DELETE FROM auth WHERE login LIKE ?');
             $query->execute([$this->login]);
@@ -79,6 +83,24 @@ class ActiveRecordAuth
             echo 'Запись прочитана.</br>';
         } else {
             echo 'Скорее всего таблица пуста' . '</br>';
+        }
+    }
+
+    /**
+     * Обновление текущего объекта/записи.
+     */
+    public function update()
+    {
+        $validation = new ValidationAuth($this);
+        $validation = $validation->validation();
+
+        if ($validation) {
+            $query = DBAuth::pdo()->prepare('UPDATE auth SET login = ?, pass = ? WHERE id = ?');
+            $query->execute([$validation->login, $validation->pass, $this->id]);
+            echo 'Запись успешно добавлена.</br>';
+            return true;
+        } else {
+            return false;
         }
     }
 }
