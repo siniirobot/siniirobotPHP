@@ -103,4 +103,26 @@ class ActiveRecordAuth
             return false;
         }
     }
+
+    /**
+     * Возрощает обьект из таблицы по заданому индексу
+     * @param $login
+     * @return $row|null
+     */
+    public static function find($login)
+    {
+        $query = DBAuth::pdo()->prepare('SELECT * FROM auth WHERE login = ?');
+        $query->execute([$login]);
+        if ($query->rowCount()) {
+            $query = $query->fetch(PDO::FETCH_ASSOC);
+            $row = new ActiveRecordAuth();
+            $row->id = $query['id'];
+            $row->login = $query['login'];
+            $row->pass = $query['pass'];
+            echo 'Запись прочитана.</br>';
+            return $row;
+        } else {
+            echo 'Нет такого id' . '</br>';
+        }
+    }
 }

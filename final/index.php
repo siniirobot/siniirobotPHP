@@ -12,6 +12,11 @@ use Databases\ActiveRecordAuth;
 use Databases\DBAuth;
 use Validation\ValidationAuth;
 
+$proba_find = new ActiveRecordAuth();
+$proba_find = $proba_find->find('Ilchenko@mail.com');
+echo 'Id:'.$proba_find->id .'</br>Login:'.$proba_find->login . '</br>Pass:' . $proba_find->pass . '</br>';
+$proba_find->pass = 'PasterMaster';
+$proba_find->update();
 
 $proba_pera = new ActiveRecordAuth();
 $proba_pera->delete();
@@ -25,6 +30,8 @@ echo 'Id:'.$proba_read->id .'</br>Login:'.$proba_read->login . '</br>Pass:' . $p
 $proba_read->pass = 'MasterPass';
 $proba_read->update();
 echo 'Id:'.$proba_read->id .'</br>Login:'.$proba_read->login . '</br>Pass:' . $proba_read->pass . '</br>';
+
+
 ?>
 
 
