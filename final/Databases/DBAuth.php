@@ -42,7 +42,6 @@ final class DBAuth
                 self::$_pdo = new PDO(
                     'mysql:host=' . self::$dbhost . ';dbname=' . self::$dbName,self::$dbUser,self::$pdPass
                 );
-                echo 'Есть контакт2';
             }catch (PDOException $e){
                 echo 'Подключение не удалось ' . $e->getMessage();
             }

@@ -13,14 +13,17 @@ require_once '/study/OSPanel/domains/first/final/autoload.php';
 
 use Databases\DBAuth;
 use Validation\Validation;
+use \PDO;
 
 class ActiveRecordAuth
 {
+    public $id;
     public $login;
     public $pass;
 
     public function __construct()
     {
+        $this->id = null;
         $this->login = null;
         $this->pass = null;
     }
@@ -37,10 +40,10 @@ class ActiveRecordAuth
         if ($validation) {
             $query = DBAuth::pdo()->prepare('INSERT INTO auth(login,pass) VALUES (?,?)');
             $query->execute([$validation->login, $validation->pass]);
-            echo 'Запись успешно добавлена.</br>';
+            echo 'Запись успешно создана.</br>';
             return true;
         } else {
-            echo 'Возникла не предвидиная ошибка.</br>';
+            echo 'При создании записи возникла ошибка.</br>';
             return false;
         }
     }
@@ -56,8 +59,26 @@ class ActiveRecordAuth
             $query->execute([$this->login]);
             echo 'Запись удалена.</br>';
         } else {
-            echo 'Такой записи не существует';
+            echo 'Чтобы удалить эту запись она должна существовать.</br>';
             return false;
+        }
+    }
+
+    /**
+     * Создание обьекта с такими же данными как и у последней записи в таблице.
+     */
+    public function read()
+    {
+        $query = DBAuth::pdo()->prepare('SELECT * FROM auth ORDER BY id DESC LIMIT 1');
+        $query->execute();
+        if ($query->rowCount()) {
+            $lastRow = $query->fetch(PDO::FETCH_ASSOC);
+            $this->id = $lastRow['id'];
+            $this->login = $lastRow['login'];
+            $this->pass = $lastRow['pass'];
+            echo 'Запись прочитана.</br>';
+        } else {
+            echo 'Скорее всего таблица пуста' . '</br>';
         }
     }
 }
