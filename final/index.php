@@ -9,20 +9,13 @@
 require_once __DIR__.'/autoload.php';
 
 use Databases\ActiveRecordAuth;
-use Databases\DBAuth;
-use Validation\ValidationAuth;
+
 
 $proba_find = new ActiveRecordAuth();
-$proba_find = $proba_find->find('Ilchenko@mail.com');
+$proba_find = $proba_find->find('Kolomeec@mail.com');
 echo 'Id:'.$proba_find->id .'</br>Login:'.$proba_find->login . '</br>Pass:' . $proba_find->pass . '</br>';
 $proba_find->pass = 'PasterMaster';
 $proba_find->update();
-
-$proba_pera = new ActiveRecordAuth();
-$proba_pera->delete();
-$proba_pera->login = 'Mironov@mail.com';
-$proba_pera->pass = 'PassMassFax';
-$proba_pera->create();
 
 $proba_read = new ActiveRecordAuth();
 $proba_read->read();
@@ -31,7 +24,11 @@ $proba_read->pass = 'MasterPass';
 $proba_read->update();
 echo 'Id:'.$proba_read->id .'</br>Login:'.$proba_read->login . '</br>Pass:' . $proba_read->pass . '</br>';
 
-
+$proba_pera = new ActiveRecordAuth();
+$proba_pera->delete();
+$proba_pera->login = 'Vasilkova@mail.com';
+$proba_pera->pass = 'PoniFoni';
+$proba_pera->create();
 ?>
 
 

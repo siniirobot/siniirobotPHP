@@ -11,7 +11,7 @@ namespace Databases;
 
 require_once '/study/OSPanel/domains/first/final/autoload.php';
 
-use Databases\DBAuth;
+use Validation\PasswordHash;
 use Validation\ValidationAuth;
 use \PDO;
 
@@ -42,6 +42,8 @@ class ActiveRecordAuth
         }
 
         if ($validation) {
+            $hash = new PasswordHash();
+            $validation->pass=$hash->hash($validation->pass);
             $query = DBAuth::pdo()->prepare('INSERT INTO auth(login,pass) VALUES (?,?)');
             $query->execute([$validation->login, $validation->pass]);
             echo 'Запись успешно создана.</br>';
@@ -95,6 +97,8 @@ class ActiveRecordAuth
         $validation = $validation->validation();
 
         if ($validation) {
+            $hash = new PasswordHash();
+            $validation->pass=$hash->hash($validation->pass);
             $query = DBAuth::pdo()->prepare('UPDATE auth SET login = ?, pass = ? WHERE id = ?');
             $query->execute([$validation->login, $validation->pass, $this->id]);
             echo 'Запись успешно добавлена.</br>';
@@ -107,7 +111,7 @@ class ActiveRecordAuth
     /**
      * Возрощает обьект из таблицы по заданому индексу
      * @param $login
-     * @return $row|null
+     * @return $row
      */
     public static function find($login)
     {
