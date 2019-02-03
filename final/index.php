@@ -10,7 +10,6 @@ require_once __DIR__.'/autoload.php';
 
 use Databases\ActiveRecordAuth;
 
-
 $proba_find = new ActiveRecordAuth();
 $proba_find = $proba_find->find('Kolomeec@mail.com');
 echo 'Id:'.$proba_find->id .'</br>Login:'.$proba_find->login . '</br>Pass:' . $proba_find->pass . '</br>';
