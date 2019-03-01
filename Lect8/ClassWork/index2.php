@@ -6,7 +6,10 @@
  * Time: 6:23
  */
 
-require_once __DIR__ . '/authoload.php';
+header('Content-Type: text/html; charset=utf-8');
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/autoload.php';
 
 use Classes\Bicycle;
 use Classes\Car;
